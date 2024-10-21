@@ -1,0 +1,4011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vocabulary Dictionary</title>
+    <style>
+        /* Set the background color */
+        body {
+            font-family: 'Cursive', sans-serif; /* Cursive font for all text */
+            background-color: #eaccff; /* Background color */
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Title box styling */
+        .title-box {
+            text-align: center; /* Center the title */
+            margin: 0 auto; /* Center the box on the page */
+            border-radius: 20px; /* Rounded corners for the title box */
+            padding: 30px; /* Padding inside the title box */
+            background-color: white; /* Background color for title box */
+            display: inline-block; /* Fit content */
+            position: relative; /* For positioning hearts */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for effect */
+        }
+
+        /* Heart styling */
+        .heart {
+            color: black; /* Black hearts */
+            font-size: 20px; /* Size for the hearts */
+            position: absolute; /* Positioning */
+        }
+
+        /* Specific positioning for hearts */
+        .heart1 { top: -10px; left: -25px; }  /* Position for left heart */
+        .heart2 { top: -10px; right: -25px; } /* Position for right heart */
+        .heart3 { bottom: -10px; left: 50%; transform: translateX(-50%); } /* Position for bottom heart */
+
+        /* Search bar styling */
+        #search {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+
+        /* Vocabulary entry styling */
+        .entry {
+            background-color: white; /* Background color for entries */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for effect */
+            margin-bottom: 15px; /* Space between entries */
+            padding: 15px; /* Padding inside each entry */
+        }
+
+        .word {
+            font-size: 24px; /* Font size for words */
+            font-weight: bold; /* Make the words bold */
+            color: black; /* Word color */
+            font-style: italic; /* Italic style for words */
+        }
+
+        .definition {
+            font-size: 18px; /* Font size for definitions */
+            color: #ffb3d9; /* Light pink color for definitions */
+            font-family: 'Cursive', sans-serif; /* Ensure definitions are cursive */
+            font-style: italic; /* Italic style for definitions */
+        }
+
+        .synonyms, .usage {
+            font-size: 18px; /* Font size for other information */
+            color: #ffb3d9; /* Light pink color for part of speech, synonyms, and usage */
+            font-family: 'Cursive', sans-serif; /* Ensure other texts are cursive */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Title section with hearts -->
+    <div class="title-box">
+        <h1>
+            &#10084;&#65039; My Vocabulary Dictionary &#10084;&#65039;
+        </h1>
+        <!-- Position hearts around the title -->
+        <span class="heart heart1">&#10084;&#65039;</span>
+        <span class="heart heart2">&#10084;&#65039;</span>
+        <span class="heart heart3">&#10084;&#65039;</span>
+    </div>
+
+    <!-- Search input -->
+    <input type="text" id="search" placeholder="Search for a word..." onkeyup="searchWord()">
+
+    <!-- Vocabulary entries -->
+    <div id="entries"></div>
+
+    <script>
+        // Array of vocabulary words and their details
+        const vocabulary = [
+            {
+                word: "Aberration",
+                definition: "A departure from what is normal, usual, or expected, typically one that is unwelcome.",
+                synonyms: "anomaly, deviation, irregularity.",
+                usage: "The sudden increase in temperature was seen as an aberration in the usually mild climate."
+            },
+            {
+                word: "Accost",
+                definition: "To approach and address someone boldly or aggressively.",
+                synonyms: "confront, approach, address.",
+                usage: "The reporter accosted the politician for a comment on the scandal."
+            },
+            {
+                word: "Acrimony",
+                definition: "Bitterness or ill feeling.",
+                synonyms: "bitterness, resentment, hostility.",
+                usage: "The acrimony between the two rivals was palpable during the debate."
+            },
+            {
+                word: "Banal",
+                definition: "So lacking in originality as to be obvious and boring.",
+                synonyms: "trite, clichéd, commonplace.",
+                usage: "The film was criticized for its banal dialogue and predictable plot."
+            },
+            {
+                word: "Callous",
+                definition: "Showing or having an insensitive and cruel disregard for others.",
+                synonyms: "insensitive, heartless, unfeeling.",
+                usage: "His callous remarks about the accident shocked everyone in the room."
+            },
+            {
+                word: "Dehort",
+                definition: "To discourage or dissuade someone from something.",
+                synonyms: "dissuade, discourage, deter.",
+                usage: "The coach dehort his players from using risky tactics in the game."
+            },
+            {
+                word: "Dissipate",
+                definition: "To disperse or scatter; to cause to disappear.",
+                synonyms: "disperse, vanish, evaporate.",
+                usage: "The fog began to dissipate as the sun rose."
+            },
+            {
+                word: "Dilapidate",
+                definition: "To cause (a building or structure) to fall into a state of disrepair.",
+                synonyms: "decay, ruin, deteriorate.",
+                usage: "The once grand mansion was now dilapidated and overgrown."
+            },
+            {
+                word: "Disdain",
+                definition: "The feeling that someone or something is unworthy of one's consideration or respect; contempt.",
+                synonyms: "contempt, scorn, derision.",
+                usage: "She looked at the messy room with disdain."
+            },
+            {
+                word: "Ebullience",
+                definition: "The quality of being cheerful and full of energy.",
+                synonyms: "exuberance, enthusiasm, liveliness.",
+                usage: "Her ebullience was contagious, lifting everyone's spirits."
+            },
+            {
+                word: "Esurient",
+                definition: "Hungry or greedy.",
+                synonyms: "ravenous, famished, greedy.",
+                usage: "The esurient crowd eagerly awaited the feast."
+            },
+            {
+                word: "Exhort",
+                definition: "To strongly encourage or urge someone to do something.",
+                synonyms: "encourage, urge, press.",
+                usage: "The teacher exhorted her students to study for the exam."
+            },
+            {
+                word: "Fiendish",
+                definition: "Extremely cruel or wicked.",
+                synonyms: "cruel, wicked, diabolical.",
+                usage: "His fiendish plan shocked everyone."
+            },
+            {
+                word: "Forlorn",
+                definition: "Pitifully sad and abandoned or lonely.",
+                synonyms: "desolate, abandoned, forsaken.",
+                usage: "The forlorn puppy waited at the door for its owner."
+            },
+            {
+                word: "Fractious",
+                definition: "Irritable and quarrelsome.",
+                synonyms: "irritable, quarrelsome, petulant.",
+                usage: "The fractious child threw a tantrum in the store."
+            },
+            {
+                word: "Lackadaisical",
+                definition: "Lacking enthusiasm and determination; carelessly lazy.",
+                synonyms: "careless, lethargic, indifferent.",
+                usage: "His lackadaisical approach to studying resulted in poor grades."
+            },
+            {
+                word: "Mendacity",
+                definition: "Untruthfulness; tendency to lie.",
+                synonyms: "dishonesty, deceit, falseness.",
+                usage: "Her mendacity eventually caught up with her."
+            },
+            {
+                word: "Malady",
+                definition: "A disease or ailment.",
+                synonyms: "illness, disease, disorder.",
+                usage: "The region suffered from a malady that affected many."
+            },
+            {
+                word: "Obliterate",
+                definition: "To destroy utterly; to wipe out.",
+                synonyms: "destroy, eradicate, annihilate.",
+                usage: "The bomb obliterated the entire city block."
+            },
+            {
+                word: "Paradigm",
+                definition: "A typical example or pattern of something; a model.",
+                synonyms: "model, pattern, example.",
+                usage: "The new paradigm of remote work has changed office culture."
+            },
+            {
+                word: "Paroxysm",
+                definition: "A sudden attack or violent expression of a particular emotion or activity.",
+                synonyms: "outburst, attack, fit.",
+                usage: "She experienced a paroxysm of joy when she heard the news."
+            },
+            {
+                word: "Pernicious",
+                definition: "Having a harmful effect, especially in a gradual or subtle way.",
+                synonyms: "harmful, damaging, destructive.",
+                usage: "The pernicious weed spread throughout the farmland."
+            },
+            {
+                word: "Perspicacity",
+                definition: "The quality of having a ready insight into things; shrewdness.",
+                synonyms: "insight, discernment, perception.",
+                usage: "Her perspicacity allowed her to make informed decisions quickly."
+            },
+            {
+                word: "Perspicacious",
+                definition: "Having a ready insight into and understanding of things.",
+                synonyms: "insightful, discerning, shrewd.",
+                usage: "The perspicacious detective solved the case in record time."
+            },
+            {
+                word: "Plight",
+                definition: "A dangerous, difficult, or otherwise unfortunate situation.",
+                synonyms: "predicament, dilemma, situation.",
+                usage: "They were caught in a plight that seemed impossible to escape."
+            },
+            {
+                word: "Pother",
+                definition: "A commotion or fuss.",
+                synonyms: "commotion, uproar, fuss.",
+                usage: "There was a pother over the missing money."
+            },
+            {
+                word: "Pusillanimous",
+                definition: "Showing a lack of courage or determination; timid.",
+                synonyms: "timid, cowardly, fearful.",
+                usage: "His pusillanimous behavior during the crisis was disappointing."
+            },
+            {
+                word: "Rend",
+                definition: "To tear something into pieces.",
+                synonyms: "tear, rip, split.",
+                usage: "The wind rended the flag as it flapped violently; IDIOMS: rend the air: sound piercingly; rend one's garments: tear clothes are a sign of extreme greif; rend one's hair: pull one's hair out as a sign of extreme greif."
+            },
+            {
+                word: "Revulsion",
+                definition: "A sense of disgust and loathing.",
+                synonyms: "disgust, repulsion, aversion.",
+                usage: "The crime scene filled him with revulsion."
+            },
+            {
+                word: "Ruse",
+                definition: "An action intended to deceive someone; a trick.",
+                synonyms: "trick, ploy, scheme.",
+                usage: "His ruse was to make her think he was busy."
+            },
+            {
+                word: "Tenacious",
+                definition: "Holding fast; characterized by keeping a firm hold.",
+                synonyms: "persistent, determined, steadfast.",
+                usage: "She was tenacious in her efforts to win the championship."
+            },
+            {
+                word: "Trammel",
+                definition: "To restrict or impede someone's freedom.",
+                synonyms: "restrict, impede, hamper.",
+                usage: "The new regulations trammel the company's growth."
+            },
+            {
+                word: "Truculent",
+                definition: "Eager or quick to argue or fight; aggressively defiant.",
+                synonyms: "aggressive, combative, belligerent.",
+                usage: "His truculent attitude made him many enemies."
+            },
+            {
+                word: "Unwavering",
+                definition: "Steady or resolute; not wavering.",
+                synonyms: "steady, resolute, steadfast.",
+                usage: "Her unwavering support helped him through tough times."
+            },
+            {
+                word: "Venerable",
+                definition: "Having a great deal of respect due to age, wisdom, or character.",
+                synonyms: "revered, esteemed, respected.",
+                usage: "The venerable professor was well-loved by his students."
+            }
+	    ];
+
+// Existing vocabulary entries
+vocabulary.push({
+    word: "Aloof",
+    definition: "Not friendly or forthcoming; cool and distant.",
+    synonyms: "distant, detached, indifferent.",
+    usage: "She remained aloof during the meeting, not engaging in conversation."
+});
+
+vocabulary.push({
+    word: "Antipathy",
+    definition: "A deep-seated feeling of aversion.",
+    synonyms: "aversion, hostility.",
+    usage: "Her antipathy towards the new policy was clear."
+});
+
+vocabulary.push({
+    word: "Apprise",
+    definition: "To inform or tell someone.",
+    synonyms: "inform, notify.",
+    usage: "Please apprise me of any changes to the schedule."
+});
+
+vocabulary.push({
+    word: "Apprize",
+    definition: "To assess the value or quality of; to inform.",
+    synonyms: "assess, evaluate.",
+    usage: "The expert will apprize the artwork before the auction."
+});
+
+vocabulary.push({
+    word: "Endow",
+    definition: "To provide with a quality, ability, or asset.",
+    synonyms: "bestow, grant.",
+    usage: "The philanthropist chose to endow the university with a large sum."
+});
+
+vocabulary.push({
+    word: "Entail",
+    definition: "To involve something as a necessary or inevitable part or consequence.",
+    synonyms: "involve, require.",
+    usage: "This job will entail working overtime during the busy season."
+});
+
+vocabulary.push({
+    word: "Fatuous",
+    definition: "Silly and pointless.",
+    synonyms: "silly, foolish.",
+    usage: "His fatuous comments did not contribute to the discussion."
+});
+
+vocabulary.push({
+    word: "Forego",
+    definition: "To decide not to do or have something.",
+    synonyms: "abstain, relinquish.",
+    usage: "She decided to forego dessert to maintain her diet."
+});
+
+vocabulary.push({
+    word: "Heed",
+    definition: "To pay attention to; to take notice of.",
+    synonyms: "notice, regard.",
+    usage: "You should heed the warnings about the storm."
+});
+
+vocabulary.push({
+    word: "Impeach",
+    definition: "To call into question the integrity or validity of a practice.",
+    synonyms: "accuse, challenge.",
+    usage: "The president faced an attempt to impeach him over the scandal."
+});
+
+vocabulary.push({
+    word: "Impede",
+    definition: "To delay or prevent someone or something by obstructing them.",
+    synonyms: "hinder, obstruct.",
+    usage: "Heavy traffic may impede our progress."
+});
+
+vocabulary.push({
+    word: "Impediment",
+    definition: "A hindrance or obstruction in doing something.",
+    synonyms: "obstacle, barrier.",
+    usage: "His speech impediment made it difficult for him to communicate."
+});
+
+vocabulary.push({
+    word: "Inscrutable",
+    definition: "Impossible to understand or interpret.",
+    synonyms: "enigmatic, mysterious.",
+    usage: "Her inscrutable expression left everyone guessing."
+});
+
+vocabulary.push({
+    word: "Insidious",
+    definition: "Proceeding in a gradual, subtle way, but with harmful effects.",
+    synonyms: "sneaky, treacherous.",
+    usage: "The insidious effects of pollution are often overlooked."
+});
+
+vocabulary.push({
+    word: "Jaded",
+    definition: "Tired, bored, or lacking enthusiasm, typically after having had too much of something.",
+    synonyms: "weary, dulled.",
+    usage: "After years of travel, he felt jaded and longed for stability."
+});
+
+vocabulary.push({
+    word: "Perpetual",
+    definition: "Never ending or changing.",
+    synonyms: "everlasting, eternal.",
+    usage: "They lived in perpetual fear of the storm."
+});
+
+vocabulary.push({
+    word: "Pertinacious",
+    definition: "Holding firmly to an opinion or a course of action.",
+    synonyms: "persistent, stubborn.",
+    usage: "She was pertinacious in her efforts to win the case."
+});
+
+vocabulary.push({
+    word: "Reticent",
+    definition: "Not revealing one's thoughts or feelings readily.",
+    synonyms: "reserved, withdrawn.",
+    usage: "She was reticent about her plans for the future."
+});
+
+vocabulary.push({
+    word: "Rouse",
+    definition: "To bring out of sleep; awaken.",
+    synonyms: "awaken, incite.",
+    usage: "He tried to rouse her from her slumber."
+});
+
+vocabulary.push({
+    word: "Sanguine",
+    definition: "Optimistic or positive, especially in a difficult situation.",
+    synonyms: "optimistic, hopeful.",
+    usage: "Despite the setbacks, she remained sanguine about the project's success."
+});
+
+vocabulary.push({
+    word: "Scrutinise",
+    definition: "To examine or inspect closely and thoroughly.",
+    synonyms: "examine, inspect.",
+    usage: "The detective began to scrutinise the evidence for clues."
+});
+
+// Adding new vocabulary entries
+vocabulary.push({
+    word: "Forgot",
+    definition: "To fail to remember something.",
+    synonyms: "overlook, neglect.",
+    usage: "I forgot to bring my notes to the meeting."
+});
+
+vocabulary.push({
+    word: "Environ",
+    definition: "To surround or enclose; to enclose.",
+    synonyms: "surround, encircle.",
+    usage: "The house is environed by tall trees and a beautiful garden."
+});
+
+// Call renderEntries() to refresh the display after adding new words
+renderEntries();
+
+// Adding new vocabulary entries
+
+vocabulary.push({
+    word: "Ambivalence",
+    definition: "The state of having mixed feelings or contradictory ideas about something or someone.",
+    synonyms: "uncertainty, indecision.",
+    usage: "Her ambivalence towards the decision made it difficult to move forward."
+});
+
+vocabulary.push({
+    word: "Subterfuge",
+    definition: "Deceit used in order to achieve one's goal.",
+    synonyms: "trickery, deception.",
+    usage: "The spy used subterfuge to infiltrate the enemy base."
+});
+
+vocabulary.push({
+    word: "Lissom",
+    definition: "Thin, supple, and graceful.",
+    synonyms: "lithe, flexible.",
+    usage: "The lissom dancer moved effortlessly across the stage."
+});
+
+vocabulary.push({
+    word: "Predicament",
+    definition: "A difficult, unpleasant, or embarrassing situation.",
+    synonyms: "dilemma, quandary.",
+    usage: "She found herself in a predicament after losing her wallet."
+});
+
+vocabulary.push({
+    word: "Bleak",
+    definition: "Lacking vegetation and exposed to the elements; cold and miserable.",
+    synonyms: "barren, desolate.",
+    usage: "The landscape looked bleak and inhospitable."
+});
+
+vocabulary.push({
+    word: "Stifle",
+    definition: "To make someone unable to breathe properly; suffocate.",
+    synonyms: "suppress, smother.",
+    usage: "The thick smoke stifled her breathing."
+});
+
+vocabulary.push({
+    word: "Dividend",
+    definition: "A sum of money paid regularly by a company to its shareholders.",
+    synonyms: "payout, distribution.",
+    usage: "The company declared a healthy dividend to its investors."
+});
+
+vocabulary.push({
+    word: "Resplendent",
+    definition: "Attractive and impressive through being richly colorful or sumptuous.",
+    synonyms: "splendid, magnificent.",
+    usage: "The queen appeared resplendent in her jeweled crown."
+});
+
+vocabulary.push({
+    word: "Soporific",
+    definition: "Tending to induce drowsiness or sleep.",
+    synonyms: "sleep-inducing, sedative.",
+    usage: "The lecture was so soporific that several students fell asleep."
+});
+
+vocabulary.push({
+    word: "Mellifluous",
+    definition: "Sweet or musical; pleasant to hear.",
+    synonyms: "honeyed, melodious.",
+    usage: "Her mellifluous voice charmed everyone in the audience."
+});
+
+vocabulary.push({
+    word: "Surreptitious",
+    definition: "Kept secret, especially because it would not be approved of.",
+    synonyms: "secretive, clandestine.",
+    usage: "They carried out a surreptitious investigation of the suspect."
+});
+
+vocabulary.push({
+    word: "Ephemeral",
+    definition: "Lasting for a very short time.",
+    synonyms: "transitory, fleeting.",
+    usage: "Fame is ephemeral in the world of entertainment."
+});
+
+vocabulary.push({
+    word: "Coerce",
+    definition: "To persuade someone to do something by using force or threats.",
+    synonyms: "compel, force.",
+    usage: "The dictator used fear to coerce the population into submission."
+});
+
+vocabulary.push({
+    word: "Psychedelic",
+    definition: "Relating to or denoting drugs that produce hallucinations and apparent expansion of consciousness.",
+    synonyms: "hallucinogenic, mind-altering.",
+    usage: "The artist's paintings were inspired by his psychedelic experiences."
+});
+
+vocabulary.push({
+    word: "Scintillate",
+    definition: "To emit flashes of light; sparkle.",
+    synonyms: "sparkle, twinkle.",
+    usage: "The stars scintillated in the clear night sky."
+});
+
+vocabulary.push({
+    word: "Esoteric",
+    definition: "Intended for or likely to be understood by only a small number of people with specialized knowledge or interest.",
+    synonyms: "obscure, arcane.",
+    usage: "The professor's lecture on quantum physics was esoteric."
+});
+
+vocabulary.push({
+    word: "Serrated",
+    definition: "Having or denoting a jagged edge; saw-like.",
+    synonyms: "jagged, toothed.",
+    usage: "The serrated knife easily cut through the tough meat."
+});
+
+vocabulary.push({
+    word: "Imbue",
+    definition: "To inspire or permeate with a feeling or quality.",
+    synonyms: "permeate, infuse.",
+    usage: "The teacher aimed to imbue her students with a love for learning."
+});
+
+vocabulary.push({
+    word: "Relish",
+    definition: "To enjoy greatly.",
+    synonyms: "enjoy, savor.",
+    usage: "He relished the opportunity to take on the new challenge."
+});
+
+vocabulary.push({
+    word: "Pulchritudinous",
+    definition: "Having great physical beauty.",
+    synonyms: "beautiful, attractive.",
+    usage: "The actress was known for her pulchritudinous appearance."
+});
+
+vocabulary.push({
+    word: "Impudent",
+    definition: "Not showing due respect for another person; impertinent.",
+    synonyms: "cheeky, rude.",
+    usage: "His impudent remark earned him a stern rebuke."
+});
+
+vocabulary.push({
+    word: "Impertinent",
+    definition: "Not showing proper respect; rude.",
+    synonyms: "insolent, disrespectful.",
+    usage: "She found his impertinent behavior quite shocking."
+});
+
+vocabulary.push({
+    word: "Feign",
+    definition: "To pretend to be affected by something.",
+    synonyms: "pretend, simulate.",
+    usage: "He feigned illness to avoid going to school."
+});
+
+vocabulary.push({
+    word: "Insatiable",
+    definition: "Impossible to satisfy.",
+    synonyms: "unquenchable, voracious.",
+    usage: "His insatiable appetite for success drove him to work harder."
+});
+
+vocabulary.push({
+    word: "Bodacious",
+    definition: "Excellent, admirable, or attractive.",
+    synonyms: "bold, remarkable.",
+    usage: "Her bodacious attitude always made her stand out in a crowd."
+});
+
+vocabulary.push({
+    word: "Innocuous",
+    definition: "Not harmful or offensive.",
+    synonyms: "harmless, inoffensive.",
+    usage: "The remark was meant to be innocuous, but it offended her."
+});
+
+vocabulary.push({
+    word: "Impish",
+    definition: "Inclined to do slightly naughty things for fun; mischievous.",
+    synonyms: "mischievous, playful.",
+    usage: "His impish grin revealed his playful nature."
+});
+
+vocabulary.push({
+    word: "Assiduous",
+    definition: "Showing great care and perseverance.",
+    synonyms: "diligent, meticulous.",
+    usage: "Her assiduous work ethic earned her a promotion."
+});
+
+vocabulary.push({
+    word: "Tenebrous",
+    definition: "Dark, shadowy, or obscure.",
+    synonyms: "murky, gloomy.",
+    usage: "The tenebrous alleyway made him feel uneasy."
+});
+
+vocabulary.push({
+    word: "Limpid",
+    definition: "Completely clear or transparent.",
+    synonyms: "clear, transparent.",
+    usage: "The limpid waters of the lake reflected the blue sky."
+});
+
+vocabulary.push({
+    word: "Limp (adj)",
+    definition: "Lacking internal strength or structure; not stiff or firm.",
+    synonyms: "floppy, droopy.",
+    usage: "The flowers became limp in the summer heat."
+});
+
+vocabulary.push({
+    word: "Docile",
+    definition: "Ready to accept control or instruction; submissive.",
+    synonyms: "compliant, obedient.",
+    usage: "The dog was remarkably docile, following every command."
+});
+
+vocabulary.push({
+    word: "Opulent",
+    definition: "Ostentatiously rich and luxurious or lavish.",
+    synonyms: "luxurious, lavish.",
+    usage: "They lived in an opulent mansion with marble floors and gold fixtures."
+});
+
+vocabulary.push({
+    word: "Inextricable",
+    definition: "Impossible to disentangle or separate.",
+    synonyms: "inseparable, tangled.",
+    usage: "The inextricable link between the two ideas was undeniable."
+});
+
+vocabulary.push({
+    word: "Beguile",
+    definition: "To charm or enchant someone, sometimes in a deceptive way.",
+    synonyms: "charm, enchant.",
+    usage: "She was beguiled by his smooth words and handsome looks."
+});
+
+vocabulary.push({
+    word: "Disparage",
+    definition: "To regard or represent as being of little worth.",
+    synonyms: "belittle, deprecate.",
+    usage: "He never missed an opportunity to disparage his competitors."
+});
+
+vocabulary.push({
+    word: "Manifold",
+    definition: "Many and various.",
+    synonyms: "diverse, numerous.",
+    usage: "The benefits of the new system were manifold."
+});
+
+vocabulary.push({
+    word: "Proliferate",
+    definition: "To increase rapidly in numbers; multiply.",
+    synonyms: "multiply, escalate.",
+    usage: "The invasive species began to proliferate, overtaking the native plants."
+});
+
+vocabulary.push({
+    word: "Incumbent",
+    definition: "Necessary for someone as a duty or responsibility.",
+    synonyms: "obligatory, mandatory.",
+    usage: "It is incumbent on all of us to do our part in protecting the environment."
+});
+
+vocabulary.push({
+    word: "Rancid",
+    definition: "Having a foul smell or taste due to decomposition, typically of fats or oils.",
+    synonyms: "putrid, foul.",
+    usage: "The butter had turned rancid after being left out in the sun."
+});
+
+vocabulary.push({
+    word: "Ramification",
+    definition: "A consequence of an action or event, especially when complex or unwelcome.",
+    synonyms: "consequence, result.",
+    usage: "They did not foresee the legal ramifications of their decision."
+});
+
+vocabulary.push({
+    word: "Ensnare",
+    definition: "To catch or trap someone or something.",
+    synonyms: "trap, entangle.",
+    usage: "The hunters hoped to ensnare a wild animal in their net."
+});
+
+vocabulary.push({
+    word: "Unimpressionable",
+    definition: "Not easily influenced.",
+    synonyms: "resistant, firm-minded.",
+    usage: "The judge was unimpressionable, remaining objective despite public pressure."
+});
+
+vocabulary.push({
+    word: "Forthright",
+    definition: "Direct and outspoken; straightforward and honest.",
+    synonyms: "frank, direct.",
+    usage: "She was forthright in her criticism of the policy."
+});
+
+vocabulary.push({
+    word: "Consternation",
+    definition: "Feelings of anxiety or dismay, typically at something unexpected.",
+    synonyms: "dismay, shock.",
+    usage: "The news of the accident caused widespread consternation."
+});
+
+vocabulary.push({
+    word: "Conflate",
+    definition: "To combine two or more concepts, ideas, or issues into one.",
+    synonyms: "merge, combine.",
+    usage: "He tended to conflate personal opinions with factual evidence."
+});
+
+vocabulary.push({
+    word: "Beseech",
+    definition: "To ask someone urgently and fervently to do something; implore.",
+    synonyms: "implore, beg.",
+    usage: "I beseech you to reconsider your decision."
+});
+
+vocabulary.push({
+    word: "Inveigh",
+    definition: "To speak or write about something with great hostility.",
+    synonyms: "denounce, rail.",
+    usage: "The politician inveighed against the new tax policy."
+});
+
+vocabulary.push({
+    word: "Exude",
+    definition: "To discharge (moisture or a smell) slowly and steadily; to display emotion or quality strongly.",
+    synonyms: "emanate, ooze.",
+    usage: "She exuded confidence during the presentation."
+});
+
+vocabulary.push({
+    word: "Savant",
+    definition: "A learned person, especially a distinguished scientist.",
+    synonyms: "scholar, intellectual.",
+    usage: "The savant was widely recognized for his contributions to quantum physics."
+});
+
+vocabulary.push({
+    word: "Instill",
+    definition: "To gradually but firmly establish an idea or attitude in a person's mind.",
+    synonyms: "implant, inculcate.",
+    usage: "The teacher aimed to instill a sense of responsibility in her students."
+});
+
+vocabulary.push({
+    word: "Voracious",
+    definition: "Wanting or devouring great quantities of food; having an eager approach to an activity.",
+    synonyms: "insatiable, ravenous.",
+    usage: "She had a voracious appetite for knowledge."
+});
+
+// Call renderEntries() to refresh the display after adding new words
+renderEntries();
+
+// Adding new vocabulary entries
+
+vocabulary.push({
+    word: "Ascertain",
+    definition: "To find something out for certain; make sure of.",
+    synonyms: "discover, determine.",
+    usage: "The detective was able to ascertain the cause of the accident."
+});
+
+vocabulary.push({
+    word: "Pertinent",
+    definition: "Relevant or applicable to a particular matter; apposite.",
+    synonyms: "relevant, appropriate.",
+    usage: "She asked a pertinent question during the meeting."
+});
+
+vocabulary.push({
+    word: "In situ",
+    definition: "In its original place; in position.",
+    synonyms: "on-site, in position.",
+    usage: "The archaeologists found the artifact in situ."
+});
+
+vocabulary.push({
+    word: "Chagrin",
+    definition: "Distress or embarrassment at having failed or been humiliated.",
+    synonyms: "annoyance, embarrassment.",
+    usage: "Much to his chagrin, his proposal was rejected."
+});
+
+vocabulary.push({
+    word: "Epigone",
+    definition: "A less distinguished follower or imitator of someone, especially an artist or philosopher.",
+    synonyms: "imitator, follower.",
+    usage: "The new author was criticized as merely an epigone of the classical writers."
+});
+
+vocabulary.push({
+    word: "Eclectic",
+    definition: "Deriving ideas, style, or taste from a broad and diverse range of sources.",
+    synonyms: "wide-ranging, varied.",
+    usage: "Her eclectic taste in music made her playlists very interesting."
+});
+
+vocabulary.push({
+    word: "Circumvent",
+    definition: "To find a way around an obstacle; to overcome a problem in a clever way.",
+    synonyms: "bypass, avoid.",
+    usage: "He tried to circumvent the rules by getting special permission."
+});
+
+vocabulary.push({
+    word: "Parsimonious",
+    definition: "Unwilling to spend money or use resources; stingy or frugal.",
+    synonyms: "stingy, miserly.",
+    usage: "Her parsimonious habits kept her from buying unnecessary things."
+});
+
+vocabulary.push({
+    word: "Tepid",
+    definition: "Only slightly warm; lukewarm; showing little enthusiasm.",
+    synonyms: "lukewarm, indifferent.",
+    usage: "The water was tepid, and the audience's applause was equally tepid."
+});
+
+vocabulary.push({
+    word: "Odious",
+    definition: "Extremely unpleasant; repulsive.",
+    synonyms: "repugnant, disgusting.",
+    usage: "The odious smell of the garbage made her feel sick."
+});
+
+vocabulary.push({
+    word: "Incessantly",
+    definition: "Without interruption; constantly.",
+    synonyms: "continuously, persistently.",
+    usage: "The baby cried incessantly throughout the night."
+});
+
+vocabulary.push({
+    word: "Progenitor",
+    definition: "A person or thing from which a person, animal, or plant is descended or originates; an ancestor or parent.",
+    synonyms: "ancestor, forefather.",
+    usage: "He is considered the progenitor of modern physics."
+});
+
+vocabulary.push({
+    word: "Progeny",
+    definition: "A descendant or the descendants of a person, animal, or plant; offspring.",
+    synonyms: "offspring, descendants.",
+    usage: "The progeny of the famous musician continue to make great music."
+});
+
+vocabulary.push({
+    word: "Effusive",
+    definition: "Expressing feelings of gratitude, pleasure, or approval in an unrestrained or heartfelt manner.",
+    synonyms: "gushing, demonstrative.",
+    usage: "Her effusive praise for the performance was hard to ignore."
+});
+
+vocabulary.push({
+    word: "Kismet",
+    definition: "Destiny or fate.",
+    synonyms: "fate, destiny.",
+    usage: "It seemed like kismet when they ran into each other at the airport."
+});
+
+vocabulary.push({
+    word: "Sordid",
+    definition: "Involving ignoble actions and motives; arousing moral distaste and contempt.",
+    synonyms: "sleazy, dirty.",
+    usage: "The tabloids were filled with sordid details of the scandal."
+});
+
+vocabulary.push({
+    word: "Squalid",
+    definition: "Extremely dirty and unpleasant, especially as a result of poverty or neglect.",
+    synonyms: "filthy, grimy.",
+    usage: "They lived in squalid conditions after the storm destroyed their home."
+});
+
+vocabulary.push({
+    word: "Amorphous",
+    definition: "Without a clearly defined shape or form.",
+    synonyms: "shapeless, formless.",
+    usage: "The amorphous cloud slowly drifted across the sky."
+});
+
+vocabulary.push({
+    word: "Delirious",
+    definition: "In an acutely disturbed state of mind resulting from illness or intoxication, characterized by restlessness, illusions, and incoherence of thought and speech.",
+    synonyms: "incoherent, crazed.",
+    usage: "He was delirious with fever and couldn’t think clearly."
+});
+
+
+vocabulary.push({
+    word: "Pine for",
+    definition: "To long for; to yearn deeply.",
+    synonyms: "yearn, long for.",
+    usage: "She pined for her home country while living abroad."
+});
+
+vocabulary.push({
+    word: "Prudent",
+    definition: "Acting with or showing care and thought for the future.",
+    synonyms: "wise, cautious.",
+    usage: "Being prudent with her money allowed her to save for the future."
+});
+
+vocabulary.push({
+    word: "Imprudent",
+    definition: "Not showing care for the consequences of an action; rash.",
+    synonyms: "unwise, incautious.",
+    usage: "It was imprudent of him to invest all his money in one stock."
+});
+
+vocabulary.push({
+    word: "Plaintive",
+    definition: "Sounding sad and mournful.",
+    synonyms: "mournful, melancholic.",
+    usage: "The plaintive cry of the violin moved the audience to tears."
+});
+
+vocabulary.push({
+    word: "Crepuscular",
+    definition: "Relating to or resembling twilight; active during twilight.",
+    synonyms: "twilight, dusky.",
+    usage: "The crepuscular animals emerged as the sun began to set."
+});
+
+vocabulary.push({
+    word: "Fiduciary",
+    definition: "Involving trust, especially with regard to the relationship between a trustee and a beneficiary.",
+    synonyms: "trustee, guardian.",
+    usage: "As her fiduciary, he was responsible for managing her estate."
+});
+
+vocabulary.push({
+    word: "Caustic",
+    definition: "Able to burn or corrode organic tissue by chemical action; sarcastic in a scathing and bitter way.",
+    synonyms: "corrosive, sarcastic.",
+    usage: "Her caustic remarks hurt his feelings deeply."
+});
+
+vocabulary.push({
+    word: "Acquiesce",
+    definition: "To accept something reluctantly but without protest.",
+    synonyms: "comply, concede.",
+    usage: "He acquiesced to her demands to avoid further arguments."
+});
+
+vocabulary.push({
+    word: "Stagnant",
+    definition: "Showing no activity; dull and sluggish.",
+    synonyms: "inactive, still.",
+    usage: "The stagnant water became a breeding ground for mosquitoes."
+});
+
+vocabulary.push({
+    word: "Volatile",
+    definition: "Liable to change rapidly and unpredictably, especially for the worse.",
+    synonyms: "unstable, unpredictable.",
+    usage: "The stock market is notoriously volatile."
+});
+
+vocabulary.push({
+    word: "Emanation",
+    definition: "An abstract but perceptible thing that issues or originates from a source.",
+    synonyms: "exhalation, emission.",
+    usage: "The emanation of heat from the radiator warmed the room."
+});
+
+vocabulary.push({
+    word: "Ratify",
+    definition: "To sign or give formal consent to a treaty, contract, or agreement, making it officially valid.",
+    synonyms: "confirm, approve.",
+    usage: "The treaty was ratified by all participating nations."
+});
+
+vocabulary.push({
+    word: "Transgression",
+    definition: "An act that goes against a law, rule, or code of conduct; an offense.",
+    synonyms: "violation, sin.",
+    usage: "His transgression of company policy led to his dismissal."
+});
+
+vocabulary.push({
+    word: "Rectify",
+    definition: "To put something right; correct.",
+    synonyms: "correct, fix.",
+    usage: "They had to rectify the error before it became a bigger problem."
+});
+
+vocabulary.push({
+    word: "Revel",
+    definition: "To enjoy oneself in a lively and noisy way, especially with drinking and dancing.",
+    synonyms: "celebrate, carouse.",
+    usage: "They reveled in the joy of their victory."
+});
+
+vocabulary.push({
+    word: "Aforesaid",
+    definition: "Previously mentioned.",
+    synonyms: "previously mentioned, aforementioned.",
+    usage: "The aforesaid agreement is hereby null and void."
+});
+
+vocabulary.push({
+    word: "Aforementioned",
+    definition: "Denoting a thing or person previously mentioned.",
+    synonyms: "previously mentioned, aforesaid.",
+    usage: "The aforementioned conditions must be met before proceeding."
+});
+
+vocabulary.push({
+    word: "Frazzle",
+    definition: "To exhaust physically or emotionally.",
+    synonyms: "exhaust, wear out.",
+    usage: "The long hours at work left her completely frazzled."
+});
+
+vocabulary.push({
+    word: "Inundate",
+    definition: "To overwhelm someone with things or people to be dealt with.",
+    synonyms: "overwhelm, flood.",
+    usage: "She was inundated with requests for interviews."
+});
+
+vocabulary.push({
+    word: "Rampant",
+    definition: "Flourishing or spreading unchecked.",
+    synonyms: "widespread, uncontrolled.",
+    usage: "Corruption was rampant in the government."
+});
+
+vocabulary.push({
+    word: "Fraught",
+    definition: "Filled with or likely to result in something undesirable.",
+    synonyms: "full of, loaded with.",
+    usage: "The negotiations were fraught with tension."
+});
+
+vocabulary.push({
+    word: "Fracas",
+    definition: "A noisy disturbance or quarrel.",
+    synonyms: "brawl, altercation.",
+    usage: "A fracas broke out in the middle of the bar."
+});
+
+vocabulary.push({
+    word: "Insular",
+    definition: "Ignorant of or uninterested in cultures, ideas, or peoples outside one's own experience.",
+    synonyms: "narrow-minded, isolated.",
+    usage: "His insular worldview made him resistant to new ideas."
+});
+
+vocabulary.push({
+    word: "Insulant",
+    definition: "One who isolates or protects from external influences.",
+    synonyms: "protector, insulator.",
+    usage: "The insulant barrier helped to maintain a controlled environment."
+});
+
+vocabulary.push({
+    word: "Commiserate",
+    definition: "To express or feel sympathy or pity; sympathize.",
+    synonyms: "sympathize, console.",
+    usage: "She went over to commiserate with her friend after the bad news."
+});
+
+vocabulary.push({
+    word: "Parse",
+    definition: "To analyze a sentence into its parts and describe their syntactic roles.",
+    synonyms: "analyze, examine.",
+    usage: "The students were asked to parse the complex sentence."
+});
+
+vocabulary.push({
+    word: "Parch",
+    definition: "To make or become dry through intense heat.",
+    synonyms: "dry up, dehydrate.",
+    usage: "The sun parched the ground during the drought."
+});
+
+vocabulary.push({
+    word: "Vagrant",
+    definition: "A person without a settled home or regular work who wanders from place to place and lives by begging.",
+    synonyms: "drifter, vagabond.",
+    usage: "The police moved the vagrant out of the park."
+});
+
+vocabulary.push({
+    word: "Usurp",
+    definition: "To take a position of power or importance illegally or by force.",
+    synonyms: "seize, overthrow.",
+    usage: "He attempted to usurp the throne from his brother."
+});
+
+vocabulary.push({
+    word: "Replete",
+    definition: "Filled or well-supplied with something.",
+    synonyms: "full, overflowing.",
+    usage: "The book was replete with detailed illustrations."
+});
+
+// Call renderEntries() to refresh the display after adding new words
+renderEntries();
+
+// Adding new vocabulary entries
+
+vocabulary.push({
+    word: "Rabid",
+    definition: "Having or proceeding from an extreme or fanatical support of or belief in something.",
+    synonyms: "fanatical, extreme.",
+    usage: "The rabid fans cheered wildly for their team."
+});
+
+vocabulary.push({
+    word: "Evade",
+    definition: "Escape or avoid, especially by cleverness or trickery.",
+    synonyms: "avoid, escape.",
+    usage: "He tried to evade the question during the interview."
+});
+
+vocabulary.push({
+    word: "Reproach",
+    definition: "Address someone in such a way as to express disapproval or disappointment.",
+    synonyms: "scold, reprimand.",
+    usage: "She reproached him for not completing his work on time."
+});
+
+vocabulary.push({
+    word: "Reel (1)",
+    definition: "To walk in a staggering or lurching manner, as if unsteady on one's feet.",
+    synonyms: "stagger, sway.",
+    usage: "He reeled down the street after a long night."
+});
+
+vocabulary.push({
+    word: "Reel (2)",
+    definition: "To feel shocked, bewildered, or very upset.",
+    synonyms: "stunned, dazed.",
+    usage: "She reeled from the news of her friend's accident."
+});
+
+vocabulary.push({
+    word: "Fleet (verb)",
+    definition: "Move or pass quickly.",
+    synonyms: "dart, fly.",
+    usage: "Time fleets when you are having fun."
+});
+
+vocabulary.push({
+    word: "Snide",
+    definition: "Derogatory or mocking in an indirect way.",
+    synonyms: "sarcastic, disparaging.",
+    usage: "He made a snide remark about her appearance."
+});
+
+vocabulary.push({
+    word: "Crest",
+    definition: "Reach the top of something, like a hill or a wave.",
+    synonyms: "peak, summit.",
+    usage: "The hikers crested the mountain after hours of climbing."
+});
+
+vocabulary.push({
+    word: "Renounce",
+    definition: "Formally declare one's abandonment of a claim, right, or possession.",
+    synonyms: "give up, relinquish.",
+    usage: "He renounced his claim to the throne."
+});
+
+vocabulary.push({
+    word: "Denounce",
+    definition: "Publicly declare to be wrong or evil.",
+    synonyms: "condemn, criticize.",
+    usage: "The government denounced the attack on civilians."
+});
+
+vocabulary.push({
+    word: "Enthral",
+    definition: "Capture the fascinated attention of.",
+    synonyms: "captivate, fascinate.",
+    usage: "The storyteller's words enthralled the audience."
+});
+
+vocabulary.push({
+    word: "Efflorescent",
+    definition: "In the process of developing or flowering.",
+    synonyms: "blooming, blossoming.",
+    usage: "The city was efflorescent, with new buildings and parks springing up everywhere."
+});
+
+vocabulary.push({
+    word: "Bereft",
+    definition: "Deprived of or lacking something, especially a non-material asset.",
+    synonyms: "deprived, without.",
+    usage: "She was bereft of any hope after hearing the bad news."
+});
+
+vocabulary.push({
+    word: "Benign",
+    definition: "Gentle and kindly; not harmful in effect.",
+    synonyms: "kind, harmless.",
+    usage: "The benign tumor was not a threat to her health."
+});
+
+vocabulary.push({
+    word: "Hedonism",
+    definition: "The pursuit of pleasure; sensual self-indulgence.",
+    synonyms: "self-indulgence, pleasure-seeking.",
+    usage: "He devoted himself to a life of hedonism, ignoring responsibilities."
+});
+
+vocabulary.push({
+    word: "Vapid",
+    definition: "Offering nothing that is stimulating or challenging; bland.",
+    synonyms: "dull, lifeless.",
+    usage: "The conversation was vapid and uninteresting."
+});
+
+vocabulary.push({
+    word: "Vim",
+    definition: "Energy and enthusiasm.",
+    synonyms: "vitality, vigor.",
+    usage: "She performed the dance with such vim and passion."
+});
+
+vocabulary.push({
+    word: "Gild",
+    definition: "To cover something with a thin layer of gold or make it look more attractive than it is.",
+    synonyms: "decorate, embellish.",
+    usage: "The picture frame was gilded with gold leaf."
+});
+
+vocabulary.push({
+    word: "Vignette",
+    definition: "A brief evocative description, account, or episode.",
+    synonyms: "sketch, scene.",
+    usage: "The author included a vignette of his childhood in the book."
+});
+
+vocabulary.push({
+    word: "Privy",
+    definition: "Sharing in the knowledge of something secret or private.",
+    synonyms: "informed of, aware of.",
+    usage: "She was privy to the details of the confidential plan."
+});
+
+vocabulary.push({
+    word: "Impropriety",
+    definition: "Failure to observe standards or show due honesty or modesty; improper behavior or character.",
+    synonyms: "misconduct, indecency.",
+    usage: "He was accused of impropriety during the negotiations."
+});
+
+vocabulary.push({
+    word: "Rescind",
+    definition: "To revoke, cancel, or repeal a law, order, or agreement.",
+    synonyms: "revoke, annul.",
+    usage: "The government decided to rescind the controversial law."
+});
+
+vocabulary.push({
+    word: "Moratorium",
+    definition: "A temporary prohibition of an activity.",
+    synonyms: "suspension, halt.",
+    usage: "There is a moratorium on drilling in the region."
+});
+
+vocabulary.push({
+    word: "Spate",
+    definition: "A large number of similar things or events appearing or occurring in quick succession.",
+    synonyms: "flood, outbreak.",
+    usage: "The city experienced a spate of burglaries over the weekend."
+});
+
+vocabulary.push({
+    word: "Titivate",
+    definition: "Make small enhancing alterations to something.",
+    synonyms: "groom, spruce up.",
+    usage: "She titivated her dress before the party."
+});
+
+vocabulary.push({
+    word: "Tither",
+    definition: "A state of nervous excitement or confusion.",
+    synonyms: "fluster, agitation.",
+    usage: "He was all in a tither over the upcoming exam."
+});
+
+vocabulary.push({
+    word: "Titularly",
+    definition: "Relating to or denoting a title or titles; in name only.",
+    synonyms: "nominally, in name.",
+    usage: "He was titularly in charge, but the real decisions were made by his deputy."
+});
+
+vocabulary.push({
+    word: "Fink",
+    definition: "A contemptible person, especially one who informs on others.",
+    synonyms: "snitch, informer.",
+    usage: "He was considered a fink for betraying his friends."
+});
+
+vocabulary.push({
+    word: "Fickle",
+    definition: "Changing frequently, especially regarding one's loyalties, interests, or affection.",
+    synonyms: "inconstant, capricious.",
+    usage: "Her fickle nature made it hard to rely on her."
+});
+
+vocabulary.push({
+    word: "Smite",
+    definition: "Strike with a firm blow.",
+    synonyms: "hit, strike.",
+    usage: "He raised his sword to smite the enemy."
+});
+
+vocabulary.push({
+    word: "Smitten",
+    definition: "Overwhelmed or struck by something, typically love.",
+    synonyms: "infatuated, enamored.",
+    usage: "He was completely smitten with her from the moment they met."
+});
+
+vocabulary.push({
+    word: "Infantile",
+    definition: "Of or occurring among babies or very young children; childish.",
+    synonyms: "childish, immature.",
+    usage: "His infantile behavior was not appropriate for the meeting."
+});
+
+vocabulary.push({
+    word: "Defy",
+    definition: "Openly resist or refuse to obey.",
+    synonyms: "disobey, resist.",
+    usage: "The protestors defied the government’s orders."
+});
+
+vocabulary.push({
+    word: "Plethora",
+    definition: "A large or excessive amount of something.",
+    synonyms: "excess, abundance.",
+    usage: "There was a plethora of food at the banquet."
+});
+
+vocabulary.push({
+    word: "Postulate",
+    definition: "To suggest or assume the existence, fact, or truth of something as a basis for reasoning, discussion, or belief.",
+    synonyms: "hypothesize, propose.",
+    usage: "The scientist postulated a new theory about the origins of life."
+});
+
+vocabulary.push({
+    word: "Multifarious",
+    definition: "Having many varied parts or aspects.",
+    synonyms: "diverse, varied.",
+    usage: "The city is known for its multifarious culture and traditions."
+});
+
+vocabulary.push({
+    word: "Stoicism",
+    definition: "The endurance of pain or hardship without the display of feelings and without complaint.",
+    synonyms: "endurance, patience.",
+    usage: "He accepted the bad news with stoicism."
+});
+
+vocabulary.push({
+    word: "Cloister",
+    definition: "Seclude or shut up in or as if in a convent or monastery.",
+    synonyms: "seclude, confine.",
+    usage: "He cloistered himself away to focus on his writing."
+});
+
+vocabulary.push({
+    word: "Fatalism",
+    definition: "The belief that all events are predetermined and therefore inevitable.",
+    synonyms: "determinism, resignation.",
+    usage: "His fatalism prevented him from taking any action to change his situation."
+});
+
+vocabulary.push({
+    word: "Quandary",
+    definition: "A state of perplexity or uncertainty over what to do in a difficult situation.",
+    synonyms: "dilemma, predicament.",
+    usage: "She found herself in a quandary about which job offer to accept."
+});
+
+vocabulary.push({
+    word: "Attenuate",
+    definition: "To reduce the force, effect, or value of something.",
+    synonyms: "weaken, diminish.",
+    usage: "The painkillers attenuated his discomfort."
+});
+
+vocabulary.push({
+    word: "Sequester",
+    definition: "Isolate or hide away.",
+    synonyms: "isolate, segregate.",
+    usage: "The jury was sequestered during the trial to prevent outside influence."
+});
+
+vocabulary.push({
+    word: "Sedentary",
+    definition: "Tending to spend much time seated; somewhat inactive.",
+    synonyms: "inactive, stationary.",
+    usage: "Her sedentary lifestyle was affecting her health."
+});
+
+vocabulary.push({
+    word: "Pettifog",
+    definition: "Argue or raise petty objections.",
+    synonyms: "quibble, nitpick.",
+    usage: "He spent the entire meeting pettifogging over trivial details."
+});
+
+vocabulary.push({
+    word: "Chunter",
+    definition: "To mutter or grumble in a discontented way.",
+    synonyms: "mutter, grumble.",
+    usage: "He chuntered to himself as he worked."
+});
+
+vocabulary.push({
+    word: "Vestige",
+    definition: "A trace of something that is disappearing or no longer exists.",
+    synonyms: "remnant, trace.",
+    usage: "The ruins were the last vestige of the ancient civilization."
+});
+
+vocabulary.push({
+    word: "Fraternise",
+    definition: "Associate or form a friendship with someone, especially when one is not supposed to.",
+    synonyms: "socialize, consort.",
+    usage: "The soldiers were forbidden to fraternize with the locals."
+});
+
+vocabulary.push({
+    word: "Sorority",
+    definition: "A society for female students in a university or college, typically for social purposes.",
+    synonyms: "sisterhood, society.",
+    usage: "She joined a sorority during her second year at university."
+});
+
+vocabulary.push({
+    word: "Clique",
+    definition: "A small group of people, with shared interests or other features in common, who spend time together and do not readily allow others to join them.",
+    synonyms: "group, faction.",
+    usage: "She felt excluded from the clique at school."
+});
+
+vocabulary.push({
+    word: "Nepotism",
+    definition: "The practice among those with power or influence of favoring relatives or friends, especially by giving them jobs.",
+    synonyms: "favoritism, cronyism.",
+    usage: "The company was accused of nepotism after hiring the CEO's cousin."
+});
+
+vocabulary.push({
+    word: "Traipse",
+    definition: "Walk or move wearily or reluctantly.",
+    synonyms: "trudge, plod.",
+    usage: "We traipsed through the muddy field for hours."
+});
+
+vocabulary.push({
+    word: "Gripe",
+    definition: "Express a complaint or grumble about something, especially something trivial.",
+    synonyms: "complain, grumble.",
+    usage: "He griped about the long wait at the restaurant."
+});
+
+vocabulary.push({
+    word: "Disarray",
+    definition: "A state of disorganization or untidiness.",
+    synonyms: "disorder, chaos.",
+    usage: "The room was in complete disarray after the party."
+});
+
+vocabulary.push({
+    word: "Precinct",
+    definition: "A district of a city or town as defined for police purposes.",
+    synonyms: "district, zone.",
+    usage: "The incident occurred within the precinct of the police station."
+});
+
+vocabulary.push({
+    word: "Cavalier (adj)",
+    definition: "Showing a lack of proper concern; offhand.",
+    synonyms: "dismissive, indifferent.",
+    usage: "His cavalier attitude towards the rules got him into trouble."
+});
+
+vocabulary.push({
+    word: "Foible",
+    definition: "A minor weakness or eccentricity in someone's character.",
+    synonyms: "weakness, flaw.",
+    usage: "We all have our foibles, but we must learn to work around them."
+});
+
+vocabulary.push({
+    word: "Fallacy",
+    definition: "A mistaken belief, especially one based on unsound arguments.",
+    synonyms: "misconception, error.",
+    usage: "The idea that the earth is flat is a widely debunked fallacy."
+});
+
+vocabulary.push({
+    word: "Fortuitous",
+    definition: "Happening by a lucky chance; fortunate.",
+    synonyms: "accidental, lucky.",
+    usage: "Their meeting was purely fortuitous, but it led to a lasting friendship."
+});
+
+vocabulary.push({
+    word: "Gratuitous",
+    definition: "Uncalled for; lacking good reason; unwarranted.",
+    synonyms: "unjustified, unnecessary.",
+    usage: "The movie was criticized for its gratuitous violence."
+});
+
+vocabulary.push({
+    word: "Pariah",
+    definition: "An outcast.",
+    synonyms: "outcast, untouchable.",
+    usage: "He became a pariah after his controversial remarks."
+});
+
+vocabulary.push({
+    word: "Comatose",
+    definition: "In a state of deep unconsciousness for a prolonged or indefinite period.",
+    synonyms: "unconscious, insensible.",
+    usage: "The patient remained comatose for several weeks after the accident."
+});
+
+vocabulary.push({
+    word: "Shindig",
+    definition: "A large, lively party, especially one celebrating something.",
+    synonyms: "party, celebration.",
+    usage: "They threw a big shindig for his birthday."
+});
+
+vocabulary.push({
+    word: "Pugilistic",
+    definition: "Of or relating to boxing or a boxer.",
+    synonyms: "combative, aggressive.",
+    usage: "His pugilistic nature often got him into fights."
+});
+
+vocabulary.push({
+    word: "Belligerent",
+    definition: "Hostile and aggressive.",
+    synonyms: "aggressive, combative.",
+    usage: "His belligerent behavior made others feel uncomfortable."
+});
+
+vocabulary.push({
+    word: "Pugnacious",
+    definition: "Eager or quick to argue, quarrel, or fight.",
+    synonyms: "quarrelsome, combative.",
+    usage: "Her pugnacious attitude often led to heated debates."
+});
+
+vocabulary.push({
+    word: "Verily",
+    definition: "Truly; certainly.",
+    synonyms: "indeed, truly.",
+    usage: "Verily, I say unto you, the truth shall set you free."
+});
+
+vocabulary.push({
+    word: "Discrepancy",
+    definition: "A lack of compatibility or similarity between two or more facts.",
+    synonyms: "difference, inconsistency.",
+    usage: "There was a discrepancy between the two accounts of the event."
+});
+
+vocabulary.push({
+    word: "Anachronism",
+    definition: "A thing belonging or appropriate to a period other than that in which it exists.",
+    synonyms: "misplacement, throwback.",
+    usage: "The presence of a smartphone in the historical film was an anachronism."
+});
+
+vocabulary.push({
+    word: "Subvert",
+    definition: "Undermine the power and authority of an established system or institution.",
+    synonyms: "undermine, overthrow.",
+    usage: "They conspired to subvert the government."
+});
+
+vocabulary.push({
+    word: "Traverse",
+    definition: "Travel across or through.",
+    synonyms: "cross, pass through.",
+    usage: "We traversed the desert in a jeep."
+});
+
+vocabulary.push({
+    word: "Deject",
+    definition: "Make someone feel dispirited or depressed.",
+    synonyms: "discourage, sadden.",
+    usage: "The news of the defeat dejected the entire team."
+});
+
+vocabulary.push({
+    word: "Austerity",
+    definition: "Sternness or severity of manner or attitude.",
+    synonyms: "severity, strictness.",
+    usage: "The austerity of the old man was evident in his harsh tone."
+});
+
+vocabulary.push({
+    word: "Befuddle",
+    definition: "Make someone unable to think clearly.",
+    synonyms: "confuse, bewilder.",
+    usage: "The complex instructions befuddled the students."
+});
+
+vocabulary.push({
+    word: "Jeopardize",
+    definition: "Put someone or something into a situation in which there is a danger of loss, harm, or failure.",
+    synonyms: "endanger, risk.",
+    usage: "His actions jeopardized the entire mission."
+});
+
+vocabulary.push({
+    word: "Crude",
+    definition: "In a natural or raw state; not yet processed or refined.",
+    synonyms: "unrefined, raw.",
+    usage: "The crude oil was shipped to the refinery for processing."
+});
+
+vocabulary.push({
+    word: "Squire",
+    definition: "A young nobleman acting as an attendant to a knight before becoming a knight himself.",
+    synonyms: "attendant, shield-bearer.",
+    usage: "The young squire eagerly awaited his chance to prove himself."
+});
+
+vocabulary.push({
+    word: "Gamut",
+    definition: "The complete range or scope of something.",
+    synonyms: "range, spectrum.",
+    usage: "The article covered the gamut of topics related to climate change."
+});
+
+// Render entries again
+renderEntries();
+
+vocabulary.push({
+    word: "Pine (verb)",
+    definition: "To suffer a mental and physical decline, especially because of a broken heart; to long for something intensely.",
+    synonyms: "yearn, long, languish.",
+    usage: "He continued to pine for his lost love, even years after their separation."
+});
+
+// Render entries again
+renderEntries();
+
+vocabulary.push({
+    word: "Subterranean",
+    definition: "Existing, occurring, or done under the earth's surface.",
+    synonyms: "underground, buried, subsurface.",
+    usage: "The subterranean cave was hidden from sight for centuries."
+});
+
+vocabulary.push({
+    word: "Barometer",
+    definition: "An instrument measuring atmospheric pressure, used especially in forecasting the weather.",
+    synonyms: "pressure gauge, weather gauge.",
+    usage: "The barometer dropped suddenly, signaling an incoming storm."
+});
+
+vocabulary.push({
+    word: "Grovelling",
+    definition: "Acting in an excessively obedient or servile way to gain favor or forgiveness.",
+    synonyms: "cringing, fawning, submissive.",
+    usage: "He was grovelling at his boss's feet, desperate to keep his job."
+});
+
+vocabulary.push({
+    word: "Quip",
+    definition: "A witty remark or joke.",
+    synonyms: "witticism, joke, jest.",
+    usage: "She responded to his complaint with a quick quip, lightening the mood."
+});
+
+vocabulary.push({
+    word: "Witticism",
+    definition: "A cleverly witty or funny remark.",
+    synonyms: "quip, jest, bon mot.",
+    usage: "His speech was filled with clever witticisms that had the audience laughing."
+});
+
+vocabulary.push({
+    word: "Wrangle",
+    definition: "To argue or dispute, especially in a noisy or angry way.",
+    synonyms: "argue, bicker, quarrel.",
+    usage: "The two politicians wrangled over the new policies during the debate."
+});
+
+// Render entries again
+renderEntries();
+
+
+vocabulary.push({
+    word: "Front",
+    definition: "To lead or act as the public face or leader of something.",
+    synonyms: "lead, represent, head.",
+    usage: "She fronted the new marketing campaign with confidence."
+});
+
+vocabulary.push({
+    word: "Collateral",
+    definition: "Something pledged as security for repayment of a loan, to be forfeited in the event of a default.",
+    synonyms: "security, guarantee, surety.",
+    usage: "He put up his house as collateral for the business loan."
+});
+
+vocabulary.push({
+    word: "Consignment",
+    definition: "A batch of goods destined for or delivered to someone.",
+    synonyms: "shipment, delivery, load.",
+    usage: "The store received a new consignment of clothes yesterday."
+});
+
+vocabulary.push({
+    word: "Braggart",
+    definition: "A person who boasts about achievements or possessions.",
+    synonyms: "boaster, show-off, egotist.",
+    usage: "He’s a braggart who never misses a chance to flaunt his wealth."
+});
+
+vocabulary.push({
+    word: "Braggadocious",
+    definition: "Boastful or arrogant.",
+    synonyms: "boastful, arrogant, swaggering.",
+    usage: "His braggadocious attitude turned off many potential clients."
+});
+
+vocabulary.push({
+    word: "Run Amok",
+    definition: "Behave uncontrollably and disruptively.",
+    synonyms: "go wild, rampage, riot.",
+    usage: "The crowd ran amok after the controversial decision was announced."
+});
+
+vocabulary.push({
+    word: "Gluttony",
+    definition: "Excessive eating or drinking.",
+    synonyms: "overindulgence, greed, voracity.",
+    usage: "His gluttony at the buffet was embarrassing."
+});
+
+vocabulary.push({
+    word: "Hone",
+    definition: "Sharpen (a blade) or refine or perfect (something) over a period of time.",
+    synonyms: "sharpen, improve, refine.",
+    usage: "She honed her cooking skills after attending culinary school."
+});
+
+vocabulary.push({
+    word: "Paraphernalia",
+    definition: "Miscellaneous articles, especially the equipment needed for a particular activity.",
+    synonyms: "equipment, gear, apparatus.",
+    usage: "The kitchen was filled with cooking paraphernalia."
+});
+
+vocabulary.push({
+    word: "Petulant",
+    definition: "Childishly sulky or bad-tempered.",
+    synonyms: "irritable, peevish, sulky.",
+    usage: "He was acting like a petulant child, refusing to listen."
+});
+
+vocabulary.push({
+    word: "Congeal",
+    definition: "Solidify or coagulate, especially by cooling.",
+    synonyms: "solidify, harden, thicken.",
+    usage: "The blood had congealed into a thick mass."
+});
+
+vocabulary.push({
+    word: "Decrepit",
+    definition: "Worn out or ruined because of age or neglect.",
+    synonyms: "dilapidated, ramshackle, decayed.",
+    usage: "The decrepit old house was on the verge of collapse."
+});
+
+vocabulary.push({
+    word: "Encase",
+    definition: "Enclose or cover in a case or close-fitting surround.",
+    synonyms: "enclose, cover, wrap.",
+    usage: "The sword was encased in a protective sheath."
+});
+
+vocabulary.push({
+    word: "Indict",
+    definition: "Formally accuse or charge with a serious crime.",
+    synonyms: "charge, accuse, prosecute.",
+    usage: "The politician was indicted on corruption charges."
+});
+
+vocabulary.push({
+    word: "Garner",
+    definition: "Gather or collect (something, especially information or approval).",
+    synonyms: "gather, collect, amass.",
+    usage: "She garnered widespread support for her new initiative."
+});
+
+vocabulary.push({
+    word: "Discern",
+    definition: "Perceive or recognize (something).",
+    synonyms: "detect, recognize, distinguish.",
+    usage: "He could barely discern the road in the thick fog."
+});
+
+vocabulary.push({
+    word: "Cognisant",
+    definition: "Having knowledge or being aware of.",
+    synonyms: "aware, conscious, informed.",
+    usage: "She was fully cognisant of the risks involved."
+});
+
+vocabulary.push({
+    word: "Cathartic",
+    definition: "Providing psychological relief through the open expression of strong emotions.",
+    synonyms: "therapeutic, healing, purgative.",
+    usage: "The crying was a cathartic release after the long and stressful day."
+});
+
+vocabulary.push({
+    word: "Specious",
+    definition: "Superficially plausible, but actually wrong.",
+    synonyms: "misleading, deceptive, false.",
+    usage: "His specious argument sounded convincing at first but fell apart under scrutiny."
+});
+
+vocabulary.push({
+    word: "Rebut",
+    definition: "Claim or prove that (evidence or an accusation) is false.",
+    synonyms: "refute, disprove, contradict.",
+    usage: "He rebutted the accusations with strong evidence to the contrary."
+});
+
+vocabulary.push({
+    word: "Poise",
+    definition: "Graceful and elegant bearing in a person; composure and dignity of manner.",
+    synonyms: "composure, grace, balance.",
+    usage: "She handled the challenging situation with great poise."
+});
+
+vocabulary.push({
+    word: "Grisly",
+    definition: "Causing horror or disgust.",
+    synonyms: "horrific, ghastly, gruesome.",
+    usage: "The grisly crime scene shocked the entire community."
+});
+
+vocabulary.push({
+    word: "Corral",
+    definition: "To gather together and confine (a group of people or things).",
+    synonyms: "round up, gather, enclose.",
+    usage: "The rancher corralled the cattle into the pen."
+});
+
+vocabulary.push({
+    word: "Convene",
+    definition: "Come or bring together for a meeting or activity.",
+    synonyms: "assemble, gather, meet.",
+    usage: "The board members convened for an emergency session."
+});
+
+vocabulary.push({
+    word: "Compound",
+    definition: "Make (something bad) worse; intensify the negative aspects of.",
+    synonyms: "aggravate, exacerbate, worsen.",
+    usage: "The heavy rains compounded the already serious flooding."
+});
+
+vocabulary.push({
+    word: "Disband",
+    definition: "Break up or cause to break up and stop functioning as a group or organization.",
+    synonyms: "dissolve, disperse, separate.",
+    usage: "The band decided to disband after their final concert."
+});
+
+vocabulary.push({
+    word: "Oblivion",
+    definition: "The state of being unaware or unconscious of what is happening.",
+    synonyms: "unconsciousness, unawareness, insensibility.",
+    usage: "He drank himself into oblivion after hearing the bad news."
+});
+
+vocabulary.push({
+    word: "Admonish",
+    definition: "Warn or reprimand someone firmly.",
+    synonyms: "reprimand, rebuke, scold.",
+    usage: "The teacher admonished the students for talking during the test."
+});
+
+vocabulary.push({
+    word: "Stipulate",
+    definition: "Demand or specify (a requirement), typically as part of an agreement.",
+    synonyms: "specify, demand, require.",
+    usage: "The contract stipulates that the work must be completed by the end of the year."
+});
+
+vocabulary.push({
+    word: "Taciturn",
+    definition: "Reserved or uncommunicative in speech; saying little.",
+    synonyms: "reticent, reserved, uncommunicative.",
+    usage: "He was a taciturn man who rarely spoke in public."
+});
+
+vocabulary.push({
+    word: "Assuage",
+    definition: "Make (an unpleasant feeling) less intense.",
+    synonyms: "relieve, alleviate, soothe.",
+    usage: "She tried to assuage his guilt by explaining it wasn’t his fault."
+});
+
+vocabulary.push({
+    word: "Apothecary",
+    definition: "A person who prepared and sold medicines and drugs.",
+    synonyms: "pharmacist, chemist, druggist.",
+    usage: "The old apothecary offered remedies for every ailment."
+});
+
+vocabulary.push({
+    word: "At the Hands of",
+    definition: "Done or caused by someone, especially something unpleasant.",
+    synonyms: "by, through, because of.",
+    usage: "The country suffered greatly at the hands of its oppressive ruler."
+});
+
+vocabulary.push({
+    word: "Stricture",
+    definition: "A restriction on a person or activity.",
+    synonyms: "restriction, limitation, constraint.",
+    usage: "The strictures of the new regulations caused an uproar among businesses."
+});
+
+vocabulary.push({
+    word: "Censorious",
+    definition: "Severely critical of others.",
+    synonyms: "critical, disapproving, condemnatory.",
+    usage: "His censorious comments made him unpopular at the meeting."
+});
+
+vocabulary.push({
+    word: "Make One's Pile",
+    definition: "To accumulate a large amount of money or wealth.",
+    synonyms: "get rich, earn a fortune, strike it rich.",
+    usage: "After investing in the right stock, he made his pile and retired early."
+});
+
+vocabulary.push({
+    word: "Dictum",
+    definition: "A formal pronouncement from an authoritative source.",
+    synonyms: "pronouncement, assertion, maxim.",
+    usage: "The judge’s dictum clarified the legal standing of the case."
+});
+
+vocabulary.push({
+    word: "Impotent",
+    definition: "Unable to take effective action; helpless or powerless.",
+    synonyms: "powerless, ineffective, helpless.",
+    usage: "The government was impotent in the face of the national crisis."
+});
+
+vocabulary.push({
+    word: "Untenable",
+    definition: "Not able to be maintained or defended against attack or objection.",
+    synonyms: "indefensible, unsustainable, weak.",
+    usage: "His argument was so weak that it quickly became untenable."
+});
+
+vocabulary.push({
+    word: "Fray",
+    definition: "A situation of intense activity, typically one incorporating an element of aggression or competition.",
+    synonyms: "battle, conflict, struggle.",
+    usage: "The CEO stepped into the fray during the heated boardroom discussion."
+});
+
+vocabulary.push({
+    word: "Sully",
+    definition: "Damage the purity or integrity of.",
+    synonyms: "tarnish, taint, stain.",
+    usage: "His reputation was sullied by the scandal."
+});
+
+vocabulary.push({
+    word: "Senile",
+    definition: "Having or showing the weaknesses or diseases of old age, especially a loss of mental faculties.",
+    synonyms: "demented, infirm, feeble-minded.",
+    usage: "He became more senile as the years passed."
+});
+
+vocabulary.push({
+    word: "Volition",
+    definition: "The faculty or power of using one's will.",
+    synonyms: "will, choice, preference.",
+    usage: "She resigned of her own volition, not because she was forced to."
+});
+
+vocabulary.push({
+    word: "Anarchy",
+    definition: "A state of disorder due to absence or nonrecognition of authority.",
+    synonyms: "lawlessness, chaos, disorder.",
+    usage: "The country descended into anarchy after the government collapsed."
+});
+
+vocabulary.push({
+    word: "Tote",
+    definition: "To carry, wield, or convey something heavy or bulky.",
+    synonyms: "carry, haul, transport.",
+    usage: "He toted his heavy backpack all the way to the top of the mountain."
+});
+
+vocabulary.push({
+    word: "Rotund",
+    definition: "Plump or round in shape; also, full or rich in sound.",
+    synonyms: "plump, rounded, portly.",
+    usage: "The rotund man sat comfortably in the large armchair."
+});
+
+vocabulary.push({
+    word: "Grandiloquent",
+    definition: "Pompous or extravagant in language, style, or manner, especially in a way that is intended to impress.",
+    synonyms: "pompous, bombastic, lofty.",
+    usage: "His grandiloquent speech left the audience feeling unimpressed."
+});
+
+vocabulary.push({
+    word: "Ingrate",
+    definition: "An ungrateful person.",
+    synonyms: "thankless, unappreciative, ungrateful.",
+    usage: "After everything they had done for him, he acted like an ingrate."
+});
+
+vocabulary.push({
+    word: "Procure",
+    definition: "Obtain (something), especially with care or effort.",
+    synonyms: "obtain, acquire, get.",
+    usage: "She managed to procure a rare book from the antique store."
+});
+
+vocabulary.push({
+    word: "Gall",
+    definition: "Bold, impudent behavior.",
+    synonyms: "audacity, nerve, boldness.",
+    usage: "He had the gall to demand a raise after showing up late every day."
+});
+
+vocabulary.push({
+    word: "Puerile",
+    definition: "Childishly silly and trivial.",
+    synonyms: "childish, immature, juvenile.",
+    usage: "His puerile jokes were not appreciated by the audience."
+});
+
+vocabulary.push({
+    word: "Deference",
+    definition: "Polite submission and respect.",
+    synonyms: "respect, regard, reverence.",
+    usage: "They bowed their heads in deference to the elder."
+});
+
+vocabulary.push({
+    word: "Vociferous",
+    definition: "Vehement or clamorous.",
+    synonyms: "outspoken, vocal, boisterous.",
+    usage: "The protesters were vociferous in their demands for change."
+});
+
+vocabulary.push({
+    word: "Acuity",
+    definition: "Sharpness or keenness of thought, vision, or hearing.",
+    synonyms: "sharpness, keenness, acuteness.",
+    usage: "Her intellectual acuity impressed everyone at the conference."
+});
+
+vocabulary.push({
+    word: "Vitriolic",
+    definition: "Filled with bitter criticism or malice.",
+    synonyms: "bitter, acrimonious, caustic.",
+    usage: "The debate quickly turned vitriolic as both sides refused to listen."
+});
+
+vocabulary.push({
+    word: "Construe",
+    definition: "Interpret (a word or action) in a particular way.",
+    synonyms: "interpret, understand, read.",
+    usage: "His silence was construed as an admission of guilt."
+});
+
+vocabulary.push({
+    word: "Vindicate",
+    definition: "Clear (someone) of blame or suspicion.",
+    synonyms: "exonerate, absolve, acquit.",
+    usage: "The evidence provided by the defense lawyer vindicated the accused."
+});
+
+vocabulary.push({
+    word: "Narcoleptic",
+    definition: "Relating to or suffering from narcolepsy, a condition characterized by an extreme tendency to fall asleep in relaxing surroundings.",
+    synonyms: "drowsy, sleepy, somnolent.",
+    usage: "The narcoleptic man struggled to stay awake during meetings."
+});
+
+vocabulary.push({
+    word: "Lacerate",
+    definition: "Tear or make deep cuts in (flesh or skin).",
+    synonyms: "tear, cut, slash.",
+    usage: "The broken glass lacerated his hand."
+});
+
+vocabulary.push({
+    word: "Eviscerate",
+    definition: "Deprive (something) of its essential content.",
+    synonyms: "gut, disembowel, deprive.",
+    usage: "The new policy eviscerated the department's funding, leaving it unable to function."
+});
+
+vocabulary.push({
+    word: "Withering",
+    definition: "Intended to make someone feel humiliated; devastating.",
+    synonyms: "devastating, scathing, humiliating.",
+    usage: "She gave him a withering look after he made the insensitive remark."
+});
+
+vocabulary.push({
+    word: "Dispossess",
+    definition: "Deprive (someone) of something that they own, typically land or property.",
+    synonyms: "deprive, strip, divest.",
+    usage: "The farmers were dispossessed of their land by the government."
+});
+
+vocabulary.push({
+    word: "Quotidian",
+    definition: "Of or occurring every day; daily.",
+    synonyms: "daily, everyday, routine.",
+    usage: "The quotidian tasks of her job became monotonous over time."
+});
+
+vocabulary.push({
+    word: "Ruminate",
+    definition: "Think deeply about something.",
+    synonyms: "ponder, contemplate, consider.",
+    usage: "He ruminated on the decision before giving his final answer."
+});
+
+vocabulary.push({
+    word: "Weak",
+    definition: "Lacking the power to perform physically demanding tasks; lacking in strength.",
+    synonyms: "feeble, frail, fragile.",
+    usage: "She was too weak to continue the hike."
+});
+
+vocabulary.push({
+    word: "Clairvoyant",
+    definition: "Having the ability to perceive events in the future or beyond normal sensory contact.",
+    synonyms: "psychic, prophetic, visionary.",
+    usage: "The clairvoyant claimed she could predict the outcome of the election."
+});
+
+vocabulary.push({
+    word: "Flit",
+    definition: "Move swiftly and lightly.",
+    synonyms: "dart, skip, fly.",
+    usage: "The birds flitted from tree to tree in the garden."
+});
+
+vocabulary.push({
+    word: "Insalubrious",
+    definition: "Unhealthy or unpleasant.",
+    synonyms: "unwholesome, noxious, unhealthy.",
+    usage: "They lived in an insalubrious part of the city."
+});
+
+vocabulary.push({
+    word: "Prosperous",
+    definition: "Successful in material terms; flourishing financially.",
+    synonyms: "wealthy, affluent, thriving.",
+    usage: "They lived a prosperous life thanks to their booming business."
+});
+
+vocabulary.push({
+    word: "Fly in the Face of",
+    definition: "To go against or act in direct opposition to something.",
+    synonyms: "contradict, defy, oppose.",
+    usage: "His decision to quit his job flew in the face of conventional wisdom."
+});
+
+vocabulary.push({
+    word: "Mull Over",
+    definition: "Think about (a fact, proposal, or request) deeply and at length.",
+    synonyms: "ponder, consider, contemplate.",
+    usage: "He spent the weekend mulling over the job offer."
+});
+
+vocabulary.push({
+    word: "Ineffectual",
+    definition: "Not producing any or the desired effect.",
+    synonyms: "ineffective, unproductive, inefficient.",
+    usage: "The negotiations were ineffectual, and no agreement was reached."
+});
+
+vocabulary.push({
+    word: "Broker",
+    definition: "Arrange or negotiate (a settlement, deal, or plan).",
+    synonyms: "negotiate, arrange, mediate.",
+    usage: "The two sides were able to broker a peace deal after months of discussions."
+});
+
+vocabulary.push({
+    word: "Nix",
+    definition: "Put an end to; cancel.",
+    synonyms: "cancel, veto, reject.",
+    usage: "The company nixed plans for a new office in the city."
+});
+
+vocabulary.push({
+    word: "Big Kahuna",
+    definition: "A person in charge or of great importance.",
+    synonyms: "boss, leader, chief.",
+    usage: "He was the big kahuna at the office, making all the key decisions."
+});
+
+vocabulary.push({
+    word: "Ostracise",
+    definition: "Exclude (someone) from a society or group.",
+    synonyms: "exclude, shun, expel.",
+    usage: "He was ostracised by his peers for his controversial opinions."
+});
+
+vocabulary.push({
+    word: "Modicum",
+    definition: "A small quantity of a particular thing, especially something desirable or valuable.",
+    synonyms: "small amount, particle, speck.",
+    usage: "There was not even a modicum of truth in his statement."
+});
+
+vocabulary.push({
+    word: "Perfunctory",
+    definition: "Carried out with a minimum of effort or reflection.",
+    synonyms: "cursory, hasty, superficial.",
+    usage: "His perfunctory response to the question suggested he didn’t care."
+});
+
+vocabulary.push({
+    word: "Adulation",
+    definition: "Excessive admiration or praise.",
+    synonyms: "praise, worship, admiration.",
+    usage: "The celebrity enjoyed the adulation of his fans."
+});
+
+vocabulary.push({
+    word: "Bint",
+    definition: "A derogatory term for a girl or woman.",
+    synonyms: "girl, woman, female.",
+    usage: "He referred to her as a bint, which was seen as offensive."
+});
+
+vocabulary.push({
+    word: "Prodigious",
+    definition: "Remarkably or impressively great in extent, size, or degree.",
+    synonyms: "enormous, colossal, immense.",
+    usage: "The scientist’s prodigious achievements earned him international recognition."
+});
+
+vocabulary.push({
+    word: "Heave a Sigh",
+    definition: "To exhale deeply in relief, sadness, or tiredness.",
+    synonyms: "exhale, sigh, breathe out.",
+    usage: "She heaved a sigh of relief when the meeting ended."
+});
+
+vocabulary.push({
+    word: "Passé",
+    definition: "No longer fashionable; out of date.",
+    synonyms: "outdated, old-fashioned, obsolete.",
+    usage: "That style of clothing is so passé."
+});
+
+vocabulary.push({
+    word: "Fink",
+    definition: "An unpleasant or contemptible person.",
+    synonyms: "rat, informant, traitor.",
+    usage: "He called his colleague a fink after he told the boss about his plans."
+});
+
+vocabulary.push({
+    word: "Slalom",
+    definition: "To move or race in a winding path, avoiding obstacles.",
+    synonyms: "zigzag, weave, wind.",
+    usage: "The skier slalomed down the course, dodging the poles with ease."
+});
+
+vocabulary.push({
+    word: "Furnish",
+    definition: "Provide (a house or room) with furniture and fittings or supply something.",
+    synonyms: "provide, supply, equip.",
+    usage: "The company was hired to furnish the office with new desks and chairs."
+});
+
+vocabulary.push({
+    word: "Peruse",
+    definition: "Read (something), typically in a thorough or careful way.",
+    synonyms: "read, examine, scrutinize.",
+    usage: "She perused the contract before signing it."
+});
+
+vocabulary.push({
+    word: "One Fell Swoop",
+    definition: "All at once, in one single action or movement.",
+    synonyms: "simultaneously, at once, in one go.",
+    usage: "He solved all the problems in one fell swoop."
+});
+
+vocabulary.push({
+    word: "Putz",
+    definition: "A stupid or worthless person.",
+    synonyms: "fool, idiot, jerk.",
+    usage: "He acted like a putz during the meeting, making everyone uncomfortable."
+});
+
+vocabulary.push({
+    word: "Diorama",
+    definition: "A model representing a scene with three-dimensional figures.",
+    synonyms: "display, model, tableau.",
+    usage: "The museum featured a detailed diorama of a medieval village."
+});
+
+vocabulary.push({
+    word: "Premonition",
+    definition: "A strong feeling that something is about to happen, especially something unpleasant.",
+    synonyms: "forewarning, foreboding, omen.",
+    usage: "She had a premonition that something terrible was going to happen."
+});
+
+vocabulary.push({
+    word: "Perversion",
+    definition: "The alteration of something from its original course, meaning, or state to a distortion or corruption of what was first intended.",
+    synonyms: "distortion, corruption, deviation.",
+    usage: "The politician’s comments were a perversion of the truth."
+});
+
+vocabulary.push({
+    word: "Insubordination",
+    definition: "Defiance of authority; refusal to obey orders.",
+    synonyms: "disobedience, defiance, rebellion.",
+    usage: "He was fired for insubordination after refusing to follow the manager's instructions."
+});
+
+vocabulary.push({
+    word: "Primp",
+    definition: "Spend time making minor adjustments to (one's hair, makeup, or clothes).",
+    synonyms: "groom, preen, spruce up.",
+    usage: "She spent hours primping in front of the mirror before the party."
+});
+
+vocabulary.push({
+    word: "Flaunt",
+    definition: "Display (something) ostentatiously, especially in order to provoke envy or admiration or to show defiance.",
+    synonyms: "show off, display, parade.",
+    usage: "She flaunted her new designer handbag in front of her friends."
+});
+
+vocabulary.push({
+    word: "Play Coy",
+    definition: "To pretend to be shy or modest in order to be alluring or to manipulate a situation.",
+    synonyms: "feign shyness, act bashful, be demure.",
+    usage: "She played coy when asked about her role in the new project."
+});
+
+vocabulary.push({
+    word: "Solomon",
+    definition: "A person regarded as being very wise, often in the context of difficult judgments.",
+    synonyms: "sage, wise person, arbitrator.",
+    usage: "He was considered the Solomon of the group, always giving sound advice."
+});
+
+vocabulary.push({
+    word: "Rook",
+    definition: "To swindle or cheat someone.",
+    synonyms: "cheat, swindle, con.",
+    usage: "He was rooked out of a large sum of money by a scam artist."
+});
+
+vocabulary.push({
+    word: "Conspire",
+    definition: "Make secret plans jointly to commit an unlawful or harmful act.",
+    synonyms: "plot, scheme, collude.",
+    usage: "The group conspired to overthrow the government."
+});
+
+vocabulary.push({
+    word: "Collude",
+    definition: "Cooperate in a secret or unlawful way in order to deceive or gain an advantage over others.",
+    synonyms: "conspire, plot, scheme.",
+    usage: "The companies colluded to fix prices, leading to a massive investigation."
+});
+
+vocabulary.push({
+    word: "Aficionado",
+    definition: "A person who is very knowledgeable and enthusiastic about an activity, subject, or pastime.",
+    synonyms: "enthusiast, devotee, connoisseur.",
+    usage: "She’s an aficionado of classical music and attends every concert in town."
+});
+
+vocabulary.push({
+    word: "Orifice",
+    definition: "An opening, as of a pipe or tube, or one in the body, such as a nostril or the anus.",
+    synonyms: "opening, aperture, hole.",
+    usage: "The doctor inspected the orifice carefully to check for blockages."
+});
+
+vocabulary.push({
+    word: "Imbibe",
+    definition: "Drink (alcohol), absorb or assimilate (ideas or knowledge).",
+    synonyms: "consume, drink, absorb.",
+    usage: "They imbibed the local culture during their travels."
+});
+
+vocabulary.push({
+    word: "Dote On",
+    definition: "To show excessive love or fondness for someone.",
+    synonyms: "adore, cherish, love.",
+    usage: "She dotes on her grandchildren, spoiling them at every opportunity."
+});
+
+vocabulary.push({
+    word: "Prostrate",
+    definition: "Lying stretched out on the ground with one's face downward (adj); to lay oneself flat on the ground in submission (verb).",
+    synonyms: "prone, stretched out, supine.",
+    usage: "The worshippers lay prostrate before the altar."
+});
+
+vocabulary.push({
+    word: "Douse",
+    definition: "Pour a liquid over; drench.",
+    synonyms: "soak, saturate, drench.",
+    usage: "He doused the campfire with water before leaving the site."
+});
+
+vocabulary.push({
+    word: "Prerogative",
+    definition: "A right or privilege exclusive to a particular individual or class.",
+    synonyms: "right, privilege, entitlement.",
+    usage: "It was the manager's prerogative to make the final decision."
+});
+
+vocabulary.push({
+    word: "Squander",
+    definition: "Waste (something, especially money or time) in a reckless and foolish manner.",
+    synonyms: "waste, misspend, misuse.",
+    usage: "He squandered his inheritance on unnecessary luxuries."
+});
+
+
+vocabulary.push({
+    word: "Ineffectual",
+    definition: "Not producing any or the desired effect.",
+    synonyms: "ineffective, unproductive, useless.",
+    usage: "The team's efforts were ultimately ineffectual in solving the problem."
+});
+
+vocabulary.push({
+    word: "Astound",
+    definition: "Shock or greatly surprise.",
+    synonyms: "amaze, astonish, stun.",
+    usage: "The magician’s final trick astounded the entire audience."
+});
+
+vocabulary.push({
+    word: "Impugn",
+    definition: "Dispute the truth, validity, or honesty of (a statement or motive); call into question.",
+    synonyms: "challenge, question, dispute.",
+    usage: "The lawyer impugned the witness's credibility during cross-examination."
+});
+
+vocabulary.push({
+    word: "Incapacitate",
+    definition: "Prevent from functioning in a normal way.",
+    synonyms: "disable, immobilize, paralyze.",
+    usage: "The accident incapacitated him, leaving him unable to work for months."
+});
+
+vocabulary.push({
+    word: "Rut",
+    definition: "A long, deep track made by repeated passage of wheels; a habit or pattern of behavior that has become dull and unproductive but is hard to change.",
+    synonyms: "groove, trench, routine.",
+    usage: "He felt stuck in a rut with his daily routine."
+});
+
+vocabulary.push({
+    word: "Shanghai",
+    definition: "Coerce or trick (someone) into a place or position.",
+    synonyms: "abduct, kidnap, force.",
+    usage: "The crew was shanghaied into service on the ship."
+});
+
+vocabulary.push({
+    word: "Extricate",
+    definition: "Free (someone or something) from a constraint or difficulty.",
+    synonyms: "release, free, disentangle.",
+    usage: "He tried to extricate himself from the uncomfortable situation."
+});
+
+vocabulary.push({
+    word: "Debacle",
+    definition: "A sudden and ignominious failure; a fiasco.",
+    synonyms: "fiasco, disaster, catastrophe.",
+    usage: "The campaign turned into a complete debacle after the scandal broke."
+});
+
+vocabulary.push({
+    word: "Ignominious",
+    definition: "Deserving or causing public disgrace or shame.",
+    synonyms: "humiliating, disgraceful, shameful.",
+    usage: "Their defeat in the tournament was ignominious."
+});
+
+vocabulary.push({
+    word: "Ensconce",
+    definition: "Establish or settle (someone) in a comfortable, safe, or secret place.",
+    synonyms: "settle, install, establish.",
+    usage: "She ensconced herself in the armchair with a good book."
+});
+
+vocabulary.push({
+    word: "Demure",
+    definition: "Reserved, modest, and shy (typically used of a woman).",
+    synonyms: "modest, shy, reserved.",
+    usage: "She was admired for her demure and polite nature."
+});
+
+vocabulary.push({
+    word: "Craven",
+    definition: "Contemptibly lacking in courage; cowardly.",
+    synonyms: "cowardly, timid, fearful.",
+    usage: "His craven refusal to stand up for his friend was disappointing."
+});
+
+vocabulary.push({
+    word: "Impart",
+    definition: "Make (information) known; communicate.",
+    synonyms: "convey, communicate, transmit.",
+    usage: "The teacher imparted her knowledge to the students."
+});
+
+vocabulary.push({
+    word: "Mutinous",
+    definition: "Refusing to obey the orders of a person in authority.",
+    synonyms: "rebellious, insubordinate, defiant.",
+    usage: "The mutinous sailors took control of the ship."
+});
+
+
+vocabulary.push({
+    word: "Underhand",
+    definition: "Acting or done in a secret or dishonest way.",
+    synonyms: "devious, deceitful, sneaky.",
+    usage: "His underhand tactics won him the contract, but at a cost to his reputation."
+});
+
+vocabulary.push({
+    word: "Lead-footed",
+    definition: "Slow or clumsy in movement or reaction; heavy-footed.",
+    synonyms: "sluggish, heavy, slow.",
+    usage: "The lead-footed driver caused a traffic jam."
+});
+
+vocabulary.push({
+    word: "Vendetta",
+    definition: "A prolonged bitter quarrel or campaign against someone.",
+    synonyms: "feud, grudge, dispute.",
+    usage: "Their family has been involved in a vendetta for generations."
+});
+
+vocabulary.push({
+    word: "Frisky",
+    definition: "Playful and full of energy.",
+    synonyms: "lively, playful, energetic.",
+    usage: "The frisky puppy ran around the yard."
+});
+
+vocabulary.push({
+    word: "Whimsical",
+    definition: "Playfully quaint or fanciful, especially in an appealing or amusing way.",
+    synonyms: "fanciful, playful, quirky.",
+    usage: "She had a whimsical sense of humor."
+});
+
+vocabulary.push({
+    word: "Credence",
+    definition: "Belief in or acceptance of something as true.",
+    synonyms: "belief, faith, trust.",
+    usage: "The witness's testimony gave credence to the defendant’s story."
+});
+
+vocabulary.push({
+    word: "Forsake",
+    definition: "Abandon (someone or something).",
+    synonyms: "abandon, desert, leave.",
+    usage: "He vowed never to forsake his friends."
+});
+
+vocabulary.push({
+    word: "Faction",
+    definition: "A small organized dissenting group within a larger one, especially in politics.",
+    synonyms: "clique, bloc, group.",
+    usage: "The party split into warring factions."
+});
+
+vocabulary.push({
+    word: "Efficacy",
+    definition: "The ability to produce a desired or intended result.",
+    synonyms: "effectiveness, efficiency, usefulness.",
+    usage: "The efficacy of the new policy is still being debated."
+});
+
+vocabulary.push({
+    word: "Reprove",
+    definition: "Reprimand or censure (someone).",
+    synonyms: "rebuke, reprimand, scold.",
+    usage: "She reproved him for being late."
+});
+
+vocabulary.push({
+    word: "Reprobate",
+    definition: "An unprincipled person (often used humorously or affectionately).",
+    synonyms: "scoundrel, rogue, rascal.",
+    usage: "He’s a lovable old reprobate."
+});
+
+vocabulary.push({
+    word: "Altruism",
+    definition: "The belief in or practice of selfless concern for the well-being of others.",
+    synonyms: "selflessness, philanthropy, benevolence.",
+    usage: "Her altruism was evident in her numerous charitable works."
+});
+
+vocabulary.push({
+    word: "Hallow",
+    definition: "Honor as holy.",
+    synonyms: "sanctify, consecrate, bless.",
+    usage: "The ground where the soldiers were buried is hallowed."
+});
+
+vocabulary.push({
+    word: "Snivel",
+    definition: "Cry and sniff in a feeble or fretful way.",
+    synonyms: "whimper, whine, cry.",
+    usage: "The child started to snivel when told he couldn’t have candy."
+});
+
+vocabulary.push({
+    word: "Disbar",
+    definition: "Expel (a lawyer) from the bar, so that they no longer have the right to practice law.",
+    synonyms: "expel, oust, revoke.",
+    usage: "The lawyer was disbarred for unethical practices."
+});
+
+vocabulary.push({
+    word: "In cahoots",
+    definition: "Colluding or conspiring together secretly.",
+    synonyms: "colluding, conspiring, plotting.",
+    usage: "The officials were in cahoots with the criminals."
+});
+
+vocabulary.push({
+    word: "Imperious",
+    definition: "Assuming power or authority without justification; arrogant and domineering.",
+    synonyms: "commanding, domineering, authoritative.",
+    usage: "His imperious tone did not win him many friends."
+});
+
+vocabulary.push({
+    word: "Schlep",
+    definition: "Haul or carry (something heavy or awkward).",
+    synonyms: "lug, drag, carry.",
+    usage: "I had to schlep my groceries up three flights of stairs."
+});
+
+vocabulary.push({
+    word: "Domineering",
+    definition: "Assert one's will over another in an arrogant way.",
+    synonyms: "overbearing, bossy, authoritarian.",
+    usage: "His domineering personality alienated his colleagues."
+});
+
+vocabulary.push({
+    word: "Encroach",
+    definition: "Intrude on (a person's territory or a thing considered to be a right).",
+    synonyms: "intrude, infringe, invade.",
+    usage: "The new development encroached on the wildlife preserve."
+});
+
+vocabulary.push({
+    word: "Deign",
+    definition: "Do something that one considers to be beneath one's dignity.",
+    synonyms: "condescend, stoop, lower oneself.",
+    usage: "She did not deign to reply to the rude remark."
+});
+
+vocabulary.push({
+    word: "Wile",
+    definition: "Noun: Devious or cunning stratagems employed in manipulating or persuading someone to do what one wants.",
+    synonyms: "trickery, cunning, craftiness.",
+    usage: "He used all his wiles to charm the guests.",
+    definition: "Verb: Lure; entice.",
+    synonyms: "entice, tempt, lure.",
+    usage: "She wiled him into buying the overpriced product."
+});
+
+vocabulary.push({
+    word: "Gaffe",
+    definition: "An unintentional act or remark causing embarrassment to its originator.",
+    synonyms: "blunder, mistake, slip.",
+    usage: "His gaffe during the interview cost him the job."
+});
+
+vocabulary.push({
+    word: "Inducement",
+    definition: "A thing that persuades or influences someone to do something.",
+    synonyms: "incentive, motivation, lure.",
+    usage: "They offered a cash inducement to secure the deal."
+});
+
+vocabulary.push({
+    word: "Induce",
+    definition: "Succeed in persuading or influencing (someone) to do something.",
+    synonyms: "persuade, convince, prompt.",
+    usage: "The advertisement induced me to try the new product."
+});
+
+vocabulary.push({
+    word: "Clobber",
+    definition: "Hit (someone) hard.",
+    synonyms: "strike, beat, hit.",
+    usage: "He clobbered the burglar with a bat."
+});
+
+vocabulary.push({
+    word: "Trounce",
+    definition: "Defeat heavily in a contest.",
+    synonyms: "thrash, defeat, crush.",
+    usage: "They trounced their opponents in the championship game."
+});
+
+vocabulary.push({
+    word: "Surfeit",
+    definition: "An excessive amount of something.",
+    synonyms: "excess, surplus, glut.",
+    usage: "A surfeit of rich food can lead to health problems."
+});
+
+vocabulary.push({
+    word: "Fester",
+    definition: "(Of a negative feeling or problem) become worse or more intense, especially through long-term neglect or indifference.",
+    synonyms: "rankle, rot, decay.",
+    usage: "Resentment began to fester within the group."
+});
+
+vocabulary.push({
+    word: "Epitomise",
+    definition: "Be a perfect example of.",
+    synonyms: "embody, exemplify, typify.",
+    usage: "His dedication to his work epitomizes the values of the company."
+});
+
+vocabulary.push({
+    word: "Trouper",
+    definition: "A reliable and uncomplaining person.",
+    synonyms: "veteran, stalwart, worker.",
+    usage: "Even when she was ill, she was a real trouper and kept working."
+});
+
+vocabulary.push({
+    word: "Get one's wires crossed",
+    definition: "To misunderstand something or someone.",
+    usage: "I think we got our wires crossed about the meeting time."
+});
+
+vocabulary.push({
+    word: "Rivet",
+    definition: "Hold (someone or something) fast so as to make them incapable of movement; attract and completely engross (someone); direct one's attention intently.",
+    synonyms: "engross, fascinate, captivate.",
+    usage: "The thrilling performance riveted the audience."
+});
+
+vocabulary.push({
+    word: "Dovetail",
+    definition: "(Verb) Fit or cause to fit together easily and conveniently.",
+    synonyms: "harmonize, match, correspond.",
+    usage: "Their schedules dovetail perfectly, so they work together easily."
+});
+
+vocabulary.push({
+    word: "Detriment",
+    definition: "The state of being harmed or damaged.",
+    synonyms: "harm, damage, injury.",
+    usage: "The policy changes were made to the detriment of the employees."
+});
+
+vocabulary.push({
+    word: "Despise",
+    definition: "Feel contempt or a deep repugnance for.",
+    synonyms: "hate, loathe, detest.",
+    usage: "She despised him for his cowardice."
+});
+
+vocabulary.push({
+    word: "Repugnant",
+    definition: "Extremely distasteful; unacceptable.",
+    synonyms: "revolting, disgusting, offensive.",
+    usage: "His behavior was repugnant to everyone at the party."
+});
+
+vocabulary.push({
+    word: "Browbeat",
+    definition: "Intimidate (someone), typically into doing something, with stern or abusive words.",
+    synonyms: "bully, intimidate, harass.",
+    usage: "He was browbeaten into signing the contract."
+});
+
+vocabulary.push({
+    word: "Mingle",
+    definition: "Move freely around a place or at a social function, associating with others.",
+    synonyms: "mix, socialize, associate.",
+    usage: "At the party, everyone was mingling and having a great time."
+});
+
+vocabulary.push({
+    word: "Semblance",
+    definition: "The outward appearance or apparent form of something, especially when the reality is different.",
+    synonyms: "appearance, veneer, guise.",
+    usage: "The semblance of normality returned after the crisis."
+});
+
+vocabulary.push({
+    word: "Agoraphobia",
+    definition: "Extreme or irrational fear of open or public places.",
+    synonyms: "anxiety disorder, social anxiety.",
+    usage: "Her agoraphobia kept her from attending crowded events."
+});
+
+vocabulary.push({
+    word: "Equanimous",
+    definition: "Calm and composed, especially in a difficult situation.",
+    synonyms: "calm, composed, serene.",
+    usage: "Despite the chaos, she remained equanimous throughout the ordeal."
+});
+
+vocabulary.push({
+    word: "Censure",
+    definition: "Express severe disapproval of (someone or something), typically in a formal statement.",
+    synonyms: "criticize, reprimand, condemn.",
+    usage: "The senator was censured for his misconduct."
+});
+
+vocabulary.push({
+    word: "Rift",
+    definition: "A serious break in friendly relations.",
+    synonyms: "breach, break, split.",
+    usage: "The argument caused a rift between the two friends."
+});
+
+vocabulary.push({
+    word: "Paucity",
+    definition: "The presence of something in only small or insufficient quantities or amounts.",
+    synonyms: "scarcity, shortage, dearth.",
+    usage: "There was a paucity of information available on the topic."
+});
+
+vocabulary.push({
+    word: "Prognosis",
+    definition: "The likely course of a disease or ailment.",
+    synonyms: "forecast, prediction, diagnosis.",
+    usage: "The doctor gave a hopeful prognosis for her recovery."
+});
+
+vocabulary.push({
+    word: "Exorbitant",
+    definition: "(Of a price or amount charged) unreasonably high.",
+    synonyms: "excessive, outrageous, extortionate.",
+    usage: "The rent for the apartment was exorbitant."
+});
+
+vocabulary.push({
+    word: "Abet",
+    definition: "Encourage or assist (someone) to do something wrong, in particular, to commit a crime or other offense.",
+    synonyms: "assist, support, encourage.",
+    usage: "He was charged with aiding and abetting the robbery."
+});
+
+vocabulary.push({
+    word: "Futile",
+    definition: "Incapable of producing any useful result; pointless.",
+    synonyms: "useless, pointless, vain.",
+    usage: "His attempts to fix the engine were futile."
+});
+
+vocabulary.push({
+    word: "Stepford",
+    definition: "Denoting someone who is robotically conformist or obedient.",
+    usage: "The employees acted like Stepford workers, doing exactly what they were told without question."
+});
+
+vocabulary.push({
+    word: "Enmity",
+    definition: "The state or feeling of being actively opposed or hostile to someone or something.",
+    synonyms: "hostility, animosity, hatred.",
+    usage: "There was a long-standing enmity between the two families."
+});
+
+vocabulary.push({
+    word: "Domesticity",
+    definition: "Home or family life.",
+    synonyms: "family life, homemaking.",
+    usage: "She embraced domesticity after moving to the countryside."
+});
+
+vocabulary.push({
+    word: "Chipper",
+    definition: "Cheerful and lively.",
+    synonyms: "cheerful, lively, spirited.",
+    usage: "Despite the early hour, he was surprisingly chipper."
+});
+
+vocabulary.push({
+    word: "Stint",
+    definition: "Supply an ungenerous or inadequate amount of (something).",
+    synonyms: "skimp, limit, withhold.",
+    usage: "They stinted on the food at the event."
+});
+
+vocabulary.push({
+    word: "Liven",
+    definition: "Make or become more lively or interesting.",
+    synonyms: "brighten, enliven, animate.",
+    usage: "The music livened up the party."
+});
+
+vocabulary.push({
+    word: "Take umbrage",
+    definition: "Take offense or feel resentment.",
+    synonyms: "take offense, be offended, feel insulted.",
+    usage: "She took umbrage at his rude comments."
+});
+
+vocabulary.push({
+    word: "Ventriloquist",
+    definition: "A person who can speak or utter sounds so that they seem to come from somewhere else, especially an entertainer who makes their voice appear to come from a puppet.",
+    synonyms: "performer, puppeteer.",
+    usage: "The ventriloquist's act amazed the audience."
+});
+
+vocabulary.push({
+    word: "Statute",
+    definition: "A written law passed by a legislative body.",
+    synonyms: "law, regulation, ordinance.",
+    usage: "The statute was enacted to protect consumer rights."
+});
+
+vocabulary.push({
+    word: "Denude",
+    definition: "Strip (something) of its covering, possessions, or assets; make bare.",
+    synonyms: "strip, clear, uncover.",
+    usage: "The storm denuded the trees of their leaves."
+});
+
+vocabulary.push({
+    word: "Ruminant",
+    definition: "A person or animal that ruminates; a contemplative person.",
+    synonyms: "thoughtful, meditative, reflective.",
+    usage: "He was a ruminant individual, always deep in thought."
+});
+
+vocabulary.push({
+    word: "Scourge",
+    definition: "A person or thing that causes great trouble or suffering.",
+    synonyms: "affliction, bane, curse.",
+    usage: "The disease was a scourge on the local population."
+});
+
+vocabulary.push({
+    word: "Defer",
+    definition: "1. Put off (an action or event) to a later time; postpone.",
+    synonyms: "postpone, delay, adjourn.",
+    usage: "The decision was deferred until next week.",
+    definition: "2. Submit humbly to (a person's wishes or qualities).",
+    synonyms: "submit, yield, acquiesce.",
+    usage: "He deferred to her expertise on the matter."
+});
+
+vocabulary.push({
+    word: "Scrimp",
+    definition: "Be thrifty or parsimonious; economize.",
+    synonyms: "skimp, save, economize.",
+    usage: "They scrimped and saved to buy a house."
+});
+
+vocabulary.push({
+    word: "The writing is on the wall",
+    definition: "There are clear signs that something unpleasant or unwelcome is going to happen.",
+    usage: "The company’s financial difficulties were a sign that the writing was on the wall."
+});
+
+vocabulary.push({
+    word: "Assemblage",
+    definition: "A collection or gathering of things or people.",
+    synonyms: "group, collection, gathering.",
+    usage: "An assemblage of artifacts was displayed in the museum."
+});
+
+vocabulary.push({
+    word: "Unflagging",
+    definition: "Tireless; persistent.",
+    synonyms: "relentless, unrelenting, tireless.",
+    usage: "Her unflagging determination helped her achieve her goals."
+});
+
+vocabulary.push({
+    word: "Topiary",
+    definition: "The art or practice of clipping shrubs or trees into ornamental shapes.",
+    synonyms: "horticulture, gardening, shrub trimming.",
+    usage: "The garden's topiary was famous for its intricate designs."
+});
+
+vocabulary.push({
+    word: "Accoutrement",
+    definition: "Additional items of dress or equipment, or other items carried or worn by a person or used for a particular activity.",
+    synonyms: "equipment, gear, accessories.",
+    usage: "He arrived with all the accoutrements of a seasoned traveler."
+});
+
+vocabulary.push({
+    word: "Spaz out",
+    definition: "Lose physical or emotional control; behave in a wildly irrational manner.",
+    synonyms: "freak out, panic, lose control.",
+    usage: "She completely spazzed out when she saw the spider."
+});
+
+vocabulary.push({
+    word: "Incarcerate",
+    definition: "Imprison or confine.",
+    synonyms: "imprison, detain, confine.",
+    usage: "He was incarcerated for fraud."
+});
+
+vocabulary.push({
+    word: "Incantate",
+    definition: "Chant or recite words, especially in magic or ritualistic context.",
+    synonyms: "chant, invoke, recite.",
+    usage: "The priest incantated the ritualistic prayers."
+});
+
+vocabulary.push({
+    word: "Inculcate",
+    definition: "Instill (an idea, attitude, or habit) by persistent instruction.",
+    synonyms: "instill, teach, infuse.",
+    usage: "They tried to inculcate a sense of responsibility in the students."
+});
+
+vocabulary.push({
+    word: "Expendable",
+    definition: "Of little significance when compared to an overall purpose, and therefore able to be abandoned or destroyed.",
+    synonyms: "disposable, replaceable, insignificant.",
+    usage: "In the eyes of the general, the soldiers were expendable."
+});
+
+vocabulary.push({
+    word: "Superimpose",
+    definition: "Place or lay (one thing) over another, typically so that both are still evident.",
+    synonyms: "overlay, cover, layer.",
+    usage: "The text was superimposed over the image."
+});
+
+vocabulary.push({
+    word: "Placate",
+    definition: "Make (someone) less angry or hostile.",
+    synonyms: "pacify, calm, appease.",
+    usage: "She tried to placate the angry customer."
+});
+
+vocabulary.push({
+    word: "Litany",
+    definition: "A tedious recital or repetitive series.",
+    synonyms: "recital, list, repetition.",
+    usage: "She went through a litany of complaints about her job."
+});
+
+vocabulary.push({
+    word: "Extemporise",
+    definition: "Compose, perform, or produce something such as music or a speech without preparation; improvise.",
+    synonyms: "improvise, ad-lib, wing it.",
+    usage: "He extemporised his speech when the teleprompter failed."
+});
+
+vocabulary.push({
+    word: "Extemporaneous",
+    definition: "Spoken or done without preparation.",
+    synonyms: "improvised, unprepared, spontaneous.",
+    usage: "Her extemporaneous remarks caught everyone by surprise."
+});
+
+vocabulary.push({
+    word: "Remiss",
+    definition: "Lacking care or attention to duty; negligent.",
+    synonyms: "negligent, careless, lax.",
+    usage: "It was remiss of him not to attend the meeting."
+});
+
+vocabulary.push({
+    word: "Remission",
+    definition: "The cancellation of a debt, charge, or penalty; a temporary or permanent decrease in the symptoms of a disease.",
+    synonyms: "forgiveness, pardon, abatement.",
+    usage: "The cancer went into remission after treatment."
+});
+
+vocabulary.push({
+    word: "Allay",
+    definition: "Diminish or put at rest (fear, suspicion, or worry).",
+    synonyms: "alleviate, ease, reduce.",
+    usage: "The report was intended to allay public concerns."
+});
+
+vocabulary.push({
+    word: "Piker",
+    definition: "A person who avoids or is reluctant to make a large investment or spend money; a stingy or cautious person.",
+    synonyms: "cheapskate, miser, tightwad.",
+    usage: "He's a real piker when it comes to tipping at restaurants."
+});
+
+vocabulary.push({
+    word: "Penchant",
+    definition: "A strong or habitual liking for something or tendency to do something.",
+    synonyms: "liking, preference, inclination.",
+    usage: "She has a penchant for luxury goods."
+});
+
+vocabulary.push({
+    word: "Utilitarian",
+    definition: "Designed to be useful or practical rather than attractive.",
+    synonyms: "practical, functional, efficient.",
+    usage: "The building was utilitarian in style, with no decorative details."
+});
+
+vocabulary.push({
+    word: "Compartmentalise",
+    definition: "Divide into sections or categories, especially to avoid dealing with conflicting emotions.",
+    synonyms: "categorize, isolate, section off.",
+    usage: "He compartmentalized his emotions to avoid getting overwhelmed."
+});
+
+vocabulary.push({
+    word: "Repression",
+    definition: "The action of subduing someone or something by force; the restraint of feelings or desires.",
+    synonyms: "suppression, restraint, control.",
+    usage: "The government's repression of protests sparked outrage."
+});
+
+vocabulary.push({
+    word: "Pyrotechnics",
+    definition: "A brilliant performance or display of a specified skill.",
+    synonyms: "fireworks, display, spectacle.",
+    usage: "The band's pyrotechnics thrilled the audience."
+});
+
+vocabulary.push({
+    word: "Puritanical",
+    definition: "Practicing or affecting strict religious or moral behavior.",
+    synonyms: "strict, moralistic, ascetic.",
+    usage: "His puritanical attitude towards entertainment was outdated."
+});
+
+vocabulary.push({
+    word: "Eschew",
+    definition: "Deliberately avoid using; abstain from.",
+    synonyms: "avoid, shun, forgo.",
+    usage: "He eschewed all forms of luxury."
+});
+
+vocabulary.push({
+    word: "Rarefied",
+    definition: "(Of air, especially that at high altitudes) containing less oxygen; distant from the lives and concerns of ordinary people.",
+    synonyms: "exclusive, elevated, esoteric.",
+    usage: "She moved in rarefied social circles."
+});
+
+vocabulary.push({
+    word: "Rarefy",
+    definition: "Make (air or a substance) less dense; make more refined or subtle.",
+    synonyms: "thin, purify, refine.",
+    usage: "The atmosphere rarefies as you climb higher."
+});
+
+vocabulary.push({
+    word: "Slew",
+    definition: "1. A large number or quantity of something.",
+    synonyms: "host, lot, mass.",
+    usage: "There was a slew of new complaints after the changes.",
+    definition: "2. Turn or slide violently or uncontrollably in a particular direction.",
+    synonyms: "swerve, veer, skid.",
+    usage: "The car slewed across the icy road."
+});
+
+vocabulary.push({
+    word: "Inane",
+    definition: "Silly; stupid.",
+    synonyms: "foolish, ridiculous, absurd.",
+    usage: "His comments during the meeting were inane."
+});
+
+vocabulary.push({
+    word: "Brash",
+    definition: "Self-assertive in a rude, noisy, or overbearing way.",
+    synonyms: "pushy, cocky, arrogant.",
+    usage: "His brash manner put off his colleagues."
+});
+
+vocabulary.push({
+    word: "Square up",
+    definition: "Confront someone or something in a determined or defiant way.",
+    synonyms: "confront, face, challenge.",
+    usage: "He squared up to the bully and refused to back down."
+});
+
+vocabulary.push({
+    word: "Gluttonous",
+    definition: "Excessively greedy, especially in food consumption.",
+    synonyms: "greedy, voracious, insatiable.",
+    usage: "He was gluttonous at the buffet, eating much more than anyone else."
+});
+
+vocabulary.push({
+    word: "Impropriety",
+    definition: "Failure to observe standards of honesty or modesty; improper behavior or character.",
+    synonyms: "misconduct, wrongdoing, indecency.",
+    usage: "The politician was accused of financial impropriety."
+});
+
+vocabulary.push({
+    word: "Apprehend",
+    definition: "1. Arrest (someone) for a crime.",
+    synonyms: "arrest, detain, capture.",
+    usage: "The police apprehended the suspect.",
+    definition: "2. Understand or perceive.",
+    synonyms: "comprehend, grasp, recognize.",
+    usage: "He failed to apprehend the seriousness of the situation."
+});
+
+vocabulary.push({
+    word: "Skirmish",
+    definition: "An episode of irregular or unpremeditated fighting, especially between small or outlying parts of armies or fleets.",
+    synonyms: "clash, fight, battle.",
+    usage: "There was a brief skirmish between the opposing forces."
+});
+
+vocabulary.push({
+    word: "Expedite",
+    definition: "Make (an action or process) happen sooner or be accomplished more quickly.",
+    synonyms: "speed up, accelerate, hasten.",
+    usage: "We need to expedite the delivery of the package."
+});
+
+vocabulary.push({
+    word: "Epiphany",
+    definition: "A moment of sudden revelation or insight.",
+    synonyms: "realization, insight, revelation.",
+    usage: "She had an epiphany about her career path during the retreat."
+});
+
+vocabulary.push({
+    word: "Subjugate",
+    definition: "Bring under domination or control, especially by conquest.",
+    synonyms: "conquer, dominate, suppress.",
+    usage: "The invaders sought to subjugate the local population."
+});
+
+vocabulary.push({
+    word: "Carouse",
+    definition: "Drink plentiful amounts of alcohol and enjoy oneself with others in a noisy, lively way.",
+    synonyms: "party, revel, celebrate.",
+    usage: "They caroused all night after winning the championship."
+});
+
+vocabulary.push({
+    word: "Antithesis",
+    definition: "A person or thing that is the direct opposite of someone or something else.",
+    synonyms: "opposite, contrast, reverse.",
+    usage: "His actions were the antithesis of his promises."
+});
+
+vocabulary.push({
+    word: "Harangue",
+    definition: "A lengthy and aggressive speech.",
+    synonyms: "tirade, rant, diatribe.",
+    usage: "The coach gave a harangue after the team's poor performance."
+});
+
+vocabulary.push({
+    word: "Incense",
+    definition: "Make (someone) very angry.",
+    synonyms: "enrage, infuriate, provoke.",
+    usage: "His rude remarks incensed the crowd."
+});
+
+vocabulary.push({
+    word: "Commandeer",
+    definition: "Officially take possession or control of (something), especially for military purposes.",
+    synonyms: "seize, take over, requisition.",
+    usage: "The soldiers commandeered civilian vehicles for the evacuation."
+});
+
+vocabulary.push({
+    word: "Preclude",
+    definition: "Prevent from happening; make impossible.",
+    synonyms: "prevent, stop, hinder.",
+    usage: "His injury precluded him from playing in the match."
+});
+
+vocabulary.push({
+    word: "Confer",
+    definition: "1. Grant or bestow (a title, degree, benefit, or right).",
+    synonyms: "grant, award, bestow.",
+    usage: "The university conferred an honorary degree upon her.",
+    definition: "2. Have discussions; exchange opinions.",
+    synonyms: "consult, talk, discuss.",
+    usage: "They conferred about the best course of action."
+});
+
+vocabulary.push({
+    word: "Appendage",
+    definition: "A thing that is added or attached to something larger or more important.",
+    synonyms: "addition, attachment, adjunct.",
+    usage: "The wings are an appendage to the main body of the aircraft."
+});
+
+vocabulary.push({
+    word: "Coyness",
+    definition: "The quality of feigning shyness or modesty to be alluring or attractive.",
+    synonyms: "shyness, bashfulness, flirtation.",
+    usage: "Her coyness only made him more intrigued."
+});
+
+vocabulary.push({
+    word: "Confound",
+    definition: "Cause surprise or confusion in (someone), especially by acting against their expectations.",
+    synonyms: "baffle, perplex, confuse.",
+    usage: "The sudden success of the project confounded its critics."
+});
+
+vocabulary.push({
+    word: "Depravity",
+    definition: "Moral corruption; wickedness.",
+    synonyms: "corruption, vice, immorality.",
+    usage: "The novel explores the depths of human depravity."
+});
+
+vocabulary.push({
+    word: "Deluge",
+    definition: "A severe flood; an overwhelming amount or number.",
+    synonyms: "flood, inundation, overflow.",
+    usage: "The deluge of complaints overwhelmed the customer service team."
+});
+
+vocabulary.push({
+    word: "Mesomorph",
+    definition: "A person with a compact and muscular body build.",
+    synonyms: "muscular person, athlete, bodybuilder.",
+    usage: "As a mesomorph, he found it easier to build muscle."
+});
+
+vocabulary.push({
+    word: "Brobdingnagian",
+    definition: "Gigantic; of colossal proportions.",
+    synonyms: "huge, enormous, gigantic.",
+    usage: "The Brobdingnagian statue towered over the city square."
+});
+
+vocabulary.push({
+    word: "In the lurch",
+    definition: "Leave someone in a difficult or embarrassing situation without assistance or support.",
+    synonyms: "abandon, desert, strand.",
+    usage: "His friends left him in the lurch when he needed them most."
+});
+
+vocabulary.push({
+    word: "Haemorrhage",
+    definition: "An escape of blood from a ruptured blood vessel; a rapid loss or outflow of something.",
+    synonyms: "bleed, loss, outflow.",
+    usage: "The company was haemorrhaging money due to poor investments."
+});
+
+vocabulary.push({
+    word: "Auricular",
+    definition: "Relating to the ear or hearing.",
+    synonyms: "auditory, aural, otic.",
+    usage: "The doctor examined the patient's auricular health."
+});
+
+vocabulary.push({
+    word: "Pandemonium",
+    definition: "Wild and noisy disorder or confusion; uproar.",
+    synonyms: "chaos, mayhem, uproar.",
+    usage: "Pandemonium broke out when the fire alarm sounded."
+});
+
+vocabulary.push({
+    word: "Incredulous",
+    definition: "Unwilling or unable to believe something.",
+    synonyms: "disbelieving, skeptical, doubtful.",
+    usage: "She gave him an incredulous look after hearing the news."
+});
+
+vocabulary.push({
+    word: "Defunct",
+    definition: "No longer existing or functioning.",
+    synonyms: "obsolete, nonfunctional, extinct.",
+    usage: "The once-thriving business is now defunct."
+});
+
+vocabulary.push({
+    word: "Malignant",
+    definition: "Very virulent or infectious; malevolent.",
+    synonyms: "cancerous, harmful, dangerous.",
+    usage: "The malignant tumor required immediate surgery."
+});
+
+
+vocabulary.push({
+    word: "innards",
+    definition: "The internal organs of a human or animal.",
+    synonyms: "entrails, insides, organs.",
+    usage: "The chef prepared a dish using the innards of the chicken."
+});
+
+vocabulary.push({
+    word: "welt",
+    definition: "A raised mark on the skin, often caused by a blow.",
+    synonyms: "bruise, bump, ridge.",
+    usage: "He had a welt on his arm after the accident."
+});
+
+vocabulary.push({
+    word: "lout",
+    definition: "An uncouth or aggressive man.",
+    synonyms: "boor, oaf, brute.",
+    usage: "He acted like a lout during the dinner party."
+});
+
+vocabulary.push({
+    word: "sartorial",
+    definition: "Relating to tailoring, clothes, or style of dress.",
+    synonyms: "fashionable, stylish, tailored.",
+    usage: "His sartorial choices were always impeccable."
+});
+
+vocabulary.push({
+    word: "due",
+    definition: "A thing that should be given to someone by right; what is deserved.",
+    synonyms: "deserved reward, entitlement.",
+    usage: "He received a large reward, which was no more than his due."
+});
+
+vocabulary.push({
+    word: "preamble",
+    definition: "A preliminary or preparatory statement.",
+    synonyms: "introduction, preface, foreword.",
+    usage: "The preamble to the constitution outlines its purposes."
+});
+
+vocabulary.push({
+    word: "Daliesque",
+    definition: "Relating to the style of Salvador Dalí, characterized by surrealism.",
+    synonyms: "surreal, dreamlike, bizarre.",
+    usage: "The artwork had a distinctly Daliesque quality."
+});
+
+vocabulary.push({
+    word: "revivify",
+    definition: "To give new life to.",
+    synonyms: "revitalize, restore, rejuvenate.",
+    usage: "The rain will revivify the dry landscape."
+});
+
+vocabulary.push({
+    word: "frequent",
+    definition: "To visit or attend often.",
+    synonyms: "visit, haunt, patronize.",
+    usage: "She frequents the local café every morning."
+});
+
+vocabulary.push({
+    word: "foray",
+    definition: "A sudden attack or incursion into enemy territory.",
+    synonyms: "raid, incursion, venture.",
+    usage: "The soldiers made a foray into the enemy camp."
+});
+
+vocabulary.push({
+    word: "incursion",
+    definition: "An invasion or attack, especially a brief one.",
+    synonyms: "invasion, raid, incursion.",
+    usage: "The incursion of enemy forces was unexpected."
+});
+
+vocabulary.push({
+    word: "kowtow",
+    definition: "To act in a subservient manner.",
+    synonyms: "grovel, fawn, submit.",
+    usage: "He refused to kowtow to his boss's demands."
+});
+
+vocabulary.push({
+    word: "inordinately",
+    definition: "To an unusually large degree; excessively.",
+    synonyms: "excessively, unduly, disproportionately.",
+    usage: "She spent inordinately long on her makeup."
+});
+
+vocabulary.push({
+    word: "debauchery",
+    definition: "Excessive indulgence in sensual pleasures.",
+    synonyms: "dissipation, indulgence, excess.",
+    usage: "The party was a night of debauchery."
+});
+
+vocabulary.push({
+    word: "squalor",
+    definition: "A state of being extremely dirty and unpleasant.",
+    synonyms: "filth, dirt, misery.",
+    usage: "They lived in squalor in the abandoned building."
+});
+
+vocabulary.push({
+    word: "rebate",
+    definition: "A return of part of the payment for some service.",
+    synonyms: "refund, discount, deduction.",
+    usage: "The company offered a rebate for early payment."
+});
+
+vocabulary.push({
+    word: "synergistically",
+    definition: "In a manner that produces a combined effect greater than the sum of their separate effects.",
+    synonyms: "cooperatively, jointly, collaboratively.",
+    usage: "The two companies worked synergistically on the project."
+});
+
+vocabulary.push({
+    word: "commingle",
+    definition: "To mix or blend together.",
+    synonyms: "mix, blend, combine.",
+    usage: "The artist liked to commingle different styles in his work."
+});
+
+vocabulary.push({
+    word: "goad",
+    definition: "To provoke or annoy someone to stimulate some action.",
+    synonyms: "urge, incite, provoke.",
+    usage: "He was goaded into taking the risk."
+});
+
+vocabulary.push({
+    word: "apoplectic",
+    definition: "Overcome with anger; furious.",
+    synonyms: "enraged, incensed, furious.",
+    usage: "She was apoplectic with rage after hearing the news."
+});
+
+vocabulary.push({
+    word: "palaver",
+    definition: "Prolonged and idle discussion.",
+    synonyms: "talk, chatter, discussion.",
+    usage: "They engaged in palaver for hours."
+});
+
+vocabulary.push({
+    word: "pilfer",
+    definition: "To steal things of little value.",
+    synonyms: "steal, thieve, purloin.",
+    usage: "He was caught pilfering office supplies."
+});
+
+vocabulary.push({
+    word: "skint",
+    definition: "Having little or no money.",
+    synonyms: "broke, penniless, poor.",
+    usage: "I can't go out tonight; I'm skint."
+});
+
+vocabulary.push({
+    word: "seraphic",
+    definition: "Characteristic of or resembling a seraph; angelic.",
+    synonyms: "angelic, heavenly, divine.",
+    usage: "Her seraphic smile lit up the room."
+});
+
+vocabulary.push({
+    word: "hick",
+    definition: "An unsophisticated or socially awkward person from the countryside.",
+    synonyms: "rube, bumpkin, yokel.",
+    usage: "He felt like a hick at the fancy dinner party."
+});
+
+vocabulary.push({
+    word: "plotz",
+    definition: "To collapse or faint, especially from shock.",
+    synonyms: "faint, swoon, collapse.",
+    usage: "I thought I would plotz when I heard the news."
+});
+
+vocabulary.push({
+    word: "haughty",
+    definition: "Arrogantly superior and disdainful.",
+    synonyms: "arrogant, conceited, proud.",
+    usage: "Her haughty attitude alienated her friends."
+});
+
+vocabulary.push({
+    word: "ninny",
+    definition: "A foolish or stupid person.",
+    synonyms: "fool, idiot, simpleton.",
+    usage: "Don't be such a ninny; just try it!"
+});
+
+vocabulary.push({
+    word: "doofer",
+    definition: "A gadget or object whose name is unknown or forgotten.",
+    synonyms: "gizmo, thingamajig, whatchamacallit.",
+    usage: "Can you pass me that doofer over there?"
+});
+
+vocabulary.push({
+    word: "carom",
+    definition: "To strike and rebound.",
+    synonyms: "bounce, ricochet, rebound.",
+    usage: "The ball caromed off the wall."
+});
+
+vocabulary.push({
+    word: "philistine",
+    definition: "A person who is hostile or indifferent to culture and the arts.",
+    synonyms: "boor, uncultured person, barbarian.",
+    usage: "He dismissed the painting as philistine."
+});
+
+vocabulary.push({
+    word: "ravage",
+    definition: "To cause severe and extensive damage to.",
+    synonyms: "devastate, destroy, ruin.",
+    usage: "The storm ravaged the coastal town."
+});
+
+vocabulary.push({
+    word: "gregarious",
+    definition: "Fond of company; sociable.",
+    synonyms: "sociable, social, outgoing.",
+    usage: "Gregarious individuals often thrive in group settings."
+});
+
+vocabulary.push({
+    word: "luminary",
+    definition: "A person who inspires or influences others, especially in a particular field.",
+    synonyms: "inspiration, leader, celebrity.",
+    usage: "She was a luminary in the world of fashion."
+});
+
+vocabulary.push({
+    word: "emancipation",
+    definition: "The act of freeing someone from restraint, control, or oppression.",
+    synonyms: "liberation, freedom, release.",
+    usage: "The emancipation of the slaves was a significant event in history."
+});
+
+vocabulary.push({
+    word: "yak",
+    definition: "To talk or chatter persistently.",
+    synonyms: "chat, talk, gossip.",
+    usage: "They yak for hours about their day."
+});
+
+vocabulary.push({
+    word: "emblazon",
+    definition: "To decorate conspicuously; to display prominently.",
+    synonyms: "display, adorn, embellish.",
+    usage: "The team's logo was emblazoned on their uniforms."
+});
+
+vocabulary.push({
+    word: "extol",
+    definition: "To praise enthusiastically.",
+    synonyms: "praise, acclaim, laud.",
+    usage: "She extolled the virtues of the new policy."
+});
+
+vocabulary.push({
+    word: "demeaning",
+    definition: "Causing a loss of dignity or respect; humiliating.",
+    synonyms: "humiliating, degrading, belittling.",
+    usage: "His demeaning comments upset her greatly."
+});
+
+vocabulary.push({
+    word: "wimple",
+    definition: "A woman's head covering, typically a cloth tied under the chin.",
+    synonyms: "veil, headscarf, kerchief.",
+    usage: "The nun wore a wimple as part of her habit."
+});
+
+vocabulary.push({
+    word: "enamour",
+    definition: "To fill with love or fascination.",
+    synonyms: "captivate, infatuate, charm.",
+    usage: "He was enamoured with her beauty."
+});
+
+vocabulary.push({
+    word: "vantage",
+    definition: "A place or position affording a good view.",
+    synonyms: "viewpoint, perspective, position.",
+    usage: "From her vantage point, she could see the entire valley."
+});
+
+vocabulary.push({
+    word: "scant",
+    definition: "Barely sufficient or adequate.",
+    synonyms: "scanty, meager, insufficient.",
+    usage: "They had scant resources to complete the project."
+});
+
+vocabulary.push({
+    word: "harbour",
+    definition: "To keep (a thought or feeling) in one's mind, especially secretly.",
+    synonyms: "conceal, shelter, hide.",
+    usage: "He harbored doubts about the decision."
+});
+
+vocabulary.push({
+    word: "rile",
+    definition: "To make (someone) annoyed or irritated.",
+    synonyms: "irritate, annoy, provoke.",
+    usage: "Her comments riled him."
+});
+
+vocabulary.push({
+    word: "embolden",
+    definition: "To give someone the courage or confidence to do something.",
+    synonyms: "encourage, inspire, fortify.",
+    usage: "The success of his first project emboldened him to take bigger risks."
+});
+
+vocabulary.push({
+    word: "culpable",
+    definition: "Deserving blame or censure; blameworthy.",
+    synonyms: "blameworthy, guilty, at fault.",
+    usage: "The driver was found culpable for the accident."
+});
+
+vocabulary.push({
+    word: "temperament",
+    definition: "A person's or animal's nature, especially as it permanently affects their behavior.",
+    synonyms: "character, nature, disposition.",
+    usage: "Her calm temperament helped in stressful situations."
+});
+
+vocabulary.push({
+    word: "covert",
+    definition: "Not openly acknowledged or displayed.",
+    synonyms: "secret, hidden, concealed.",
+    usage: "They held a covert meeting to discuss their plans."
+});
+
+vocabulary.push({
+    word: "concede",
+    definition: "To admit that something is true or valid after first denying or resisting it.",
+    synonyms: "admit, acknowledge, accept.",
+    usage: "He had to concede that he was wrong."
+});
+
+vocabulary.push({
+    word: "deface",
+    definition: "To spoil the surface or appearance of something.",
+    synonyms: "vandalize, mar, damage.",
+    usage: "They were charged with defacing public property."
+});
+
+vocabulary.push({
+    word: "morose",
+    definition: "Sullen and ill-tempered.",
+    synonyms: "gloomy, sulky, glum.",
+    usage: "His morose expression indicated he was not in the mood to talk."
+});
+
+vocabulary.push({
+    word: "dreary",
+    definition: "Dull, bleak, and lifeless; depressing.",
+    synonyms: "dismal, bleak, drab.",
+    usage: "The weather was dreary, making everyone feel sluggish."
+});
+
+vocabulary.push({
+    word: "preemptive",
+    definition: "Taken as a measure against something possible, anticipated, or feared.",
+    synonyms: "preventive, anticipatory, proactive.",
+    usage: "They took preemptive action to avoid the problem."
+});
+
+vocabulary.push({
+    word: "pall",
+    definition: "To become less appealing or attractive.",
+    synonyms: "diminish, wane, fade.",
+    usage: "The excitement of the event began to pall after a few hours."
+});
+
+vocabulary.push({
+    word: "chasten",
+    definition: "To have a restraining or moderating effect on.",
+    synonyms: "subdue, restrain, discipline.",
+    usage: "He was chastened by the criticism."
+});
+
+vocabulary.push({
+    word: "implode",
+    definition: "To collapse inward suddenly or violently.",
+    synonyms: "collapse, cave in, fail.",
+    usage: "The building imploded after the explosion."
+});
+
+vocabulary.push({
+    word: "waif",
+    definition: "A homeless and helpless person, especially a neglected child.",
+    synonyms: "orphan, stray, castaway.",
+    usage: "The waif wandered the streets in search of food."
+});
+
+vocabulary.push({
+    word: "effusive",
+    definition: "Expressing feelings of gratitude, pleasure, or approval in an unrestrained manner.",
+    synonyms: "enthusiastic, exuberant, lavish.",
+    usage: "Her effusive praise made the author blush."
+});
+
+vocabulary.push({
+    word: "automat",
+    definition: "A restaurant in which food is served by machines or from vending machines.",
+    synonyms: "self-service restaurant, vending establishment.",
+    usage: "They enjoyed a quick meal at the automat."
+});
+
+vocabulary.push({
+    word: "preside",
+    definition: "To be in a position of authority at a meeting or gathering.",
+    synonyms: "oversee, lead, direct.",
+    usage: "She was asked to preside over the meeting."
+});
+
+vocabulary.push({
+    word: "effrontery",
+    definition: "Insolent or impertinent behavior.",
+    synonyms: "audacity, nerve, impudence.",
+    usage: "He had the effrontery to challenge the boss."
+});
+
+vocabulary.push({
+    word: "infiltrate",
+    definition: "To gain access to an organization or place surreptitiously.",
+    synonyms: "penetrate, permeate, invade.",
+    usage: "Agents were sent to infiltrate the enemy's ranks."
+});
+
+
+        // Function to render vocabulary entries
+        function renderEntries() {
+            const entriesDiv = document.getElementById('entries');
+            entriesDiv.innerHTML = ''; // Clear existing entries
+            // Sort entries alphabetically by the word
+            vocabulary.sort((a, b) => a.word.localeCompare(b.word));
+            // Create HTML for each entry
+            vocabulary.forEach(item => {
+                const entryDiv = document.createElement('div');
+                entryDiv.className = 'entry';
+                entryDiv.innerHTML = `
+                    <div class="word">${item.word}</div>
+                    <div class="definition">${item.definition}</div>
+                    <div class="synonyms">Synonyms: ${item.synonyms}</div>
+                    <div class="usage">Usage: ${item.usage}</div>
+                `;
+                entriesDiv.appendChild(entryDiv);
+            });
+        }
+
+        // Call renderEntries to display the vocabulary on load
+        renderEntries();
+
+        // Search functionality
+        function searchWord() {
+            const input = document.getElementById('search').value.toLowerCase();
+            const entries = document.querySelectorAll('.entry');
+            entries.forEach(entry => {
+                const word = entry.querySelector('.word').textContent.toLowerCase();
+                if (word.includes(input)) {
+                    entry.style.display = '';
+                } else {
+                    entry.style.display = 'none';
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>
+
+
